@@ -1,0 +1,8 @@
+<div *ngIf="data?.cardId == null" class="empty" (click)="onCardClick($event)">
+  Nix mehr da!!!!
+</div>
+<div *ngIf="data?.cardId != null" [class]="data?.className" (click)="onCardClick($event)">
+  <div *ngIf="!data.covered" class="value">{{data.value}}</div>
+  <div *ngIf="data.covered" class="cover">&nbsp;</div>
+  {{ss.hiddenStack.length}}
+</div>

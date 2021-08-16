@@ -1,0 +1,8 @@
+<table class="content">
+  <tr *ngFor="let row of ss.players[player]?.gameGrid">
+    <td *ngFor="let card of row">
+      <app-gaming-card [data]="card"></app-gaming-card>
+    </td>
+  </tr>
+</table>
+<div class="counter">{{visibleValue}}</div>

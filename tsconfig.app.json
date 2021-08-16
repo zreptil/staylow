@@ -2,7 +2,9 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "outDir": "./out-tsc/app",
+    "baseUrl": "./",
+    "outDir": "./dist/out-locl",
+    "sourceMap": false,
     "types": []
   },
   "files": [

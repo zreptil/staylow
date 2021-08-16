@@ -1,1 +1,98 @@
-/* You can add global styles to this file, and also import other style files */
+@import 'styles/color-vars.scss';
+
+body {
+  display: block;
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  font-family: Roboto, Verdana, Tahoma, Arial, sans-serif;
+}
+
+app-frame {
+  display: flex;
+  height: 100vh;
+  background: $frame-back;
+  color: $frame-fore;
+
+  app-player-grid {
+    padding: 1em;
+
+    .counter {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      background: black;
+      padding: 0.5em;
+      color: #fff;
+    }
+  }
+}
+
+app-gaming-card {
+  .empty {
+    border: 0.5em solid transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 6em;
+    height: 9em;
+  }
+
+  .card {
+    border-radius: 0.5em;
+    border: 0.5em solid white;
+    width: 6em;
+    height: 9em;
+    cursor: pointer;
+
+    .value {
+      display: flex;
+      width: 100%;
+      height: 100%;
+      align-items: center;
+      justify-content: center;
+      font-size: 3em;
+      font-weight: bold;
+      pointer-events: none;
+      text-shadow: -2px 2px 0px #fff, -2px -2px 0px #fff, 2px -2px 0px #fff, 2px 2px 0px #fff;
+    }
+
+    .cover {
+      display: flex;
+      width: 100%;
+      height: 100%;
+      align-items: center;
+      justify-content: center;
+      font-size: 3em;
+      font-weight: bold;
+      pointer-events: none;
+      background: $card-cover;
+    }
+  }
+
+  .c0 {
+    background: purple;
+  }
+
+  .c1 {
+    background: #c0c0ff;
+  }
+
+  .c2 {
+    background: green;
+  }
+
+  .c3 {
+    background: #ee0;
+  }
+
+  .c4 {
+    background: red;
+  }
+}
+
+app-player-grid .content {
+  border: 3px solid black;
+}
