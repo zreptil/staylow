@@ -1,8 +1,25 @@
-<div *ngIf="data?.cardId == null" class="empty" (click)="onCardClick($event)">
-  Nix mehr da!!!!
+<div (click)="onCardClick()" *ngIf="data?.cardId == null" class="empty">
+  &nbsp;
 </div>
-<div *ngIf="data?.cardId != null" [class]="data?.className" (click)="onCardClick($event)">
-  <div *ngIf="!data.covered" class="value">{{data.value}}</div>
-  <div *ngIf="data.covered" class="cover">&nbsp;</div>
-  {{ss.hiddenStack.length}}
+<div (click)="onCardClick()" *ngIf="data?.cardId != null" [class]="ss.getClassForCard(data)">
+  <div *ngIf="!data.covered" class="value">
+    <div>{{data.value}}</div>
+    <div *ngIf="!ss.env.production" class="debug">
+      {{data.cardId}}-{{data.scope.type}}
+      <ng-container *ngIf="data.scope.type==='openpile'">
+        {{ss.openPile.length}}
+      </ng-container>
+    </div>
+  </div>
+  <div *ngIf="data.covered" class="cover">
+    <div class="text">
+      {{ss.env.appName}}
+      <div *ngIf="!ss.env.production" class="debug">
+        {{data.cardId}}-{{data.scope.type}}
+        <ng-container *ngIf="data.scope.type==='drawpile'">
+          {{ss.drawPile.length}}
+        </ng-container>
+      </div>
+    </div>
+  </div>
 </div>

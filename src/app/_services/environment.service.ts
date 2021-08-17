@@ -9,6 +9,7 @@ import { version } from 'src/environments/version';
 export class EnvironmentService {
   public production: boolean;
   public version = version;
+  public appName = 'StayLow';
 
   constructor(private ls: LoggerService) {
     log.create(ls, this, LogLevel.debug);

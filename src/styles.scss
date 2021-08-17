@@ -1,4 +1,5 @@
 @import 'styles/color-vars.scss';
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
 
 body {
   display: block;
@@ -9,23 +10,83 @@ body {
   font-family: Roboto, Verdana, Tahoma, Arial, sans-serif;
 }
 
+app-player-grid {
+  .content {
+    width: fit-content;
+    margin: 2em;
+    outline: 2em solid rgba(0, 0, 0, 0.1);
+    background-color: #a83;
+  }
+
+  .inactive {
+  }
+}
+
+.inactivePanel {
+  display: flex;
+  flex: 1;
+  flex-wrap: wrap;
+  overflow-y: auto;
+  align-items: flex-start;
+  justify-content: flex-start;
+
+  app-player-grid {
+    font-size: 0.4em;
+  }
+}
+
 app-frame {
   display: flex;
   height: 100vh;
   background: $frame-back;
   color: $frame-fore;
+  overflow-y: auto;
 
-  app-player-grid {
-    padding: 1em;
+  .stackPanel {
+    display: flex;
+    flex-flow: column;
+    align-items: center;
 
-    .counter {
+    .stacks {
       display: flex;
+      flex-flow: row;
+
+      app-gaming-card {
+        padding: 0.5em;
+      }
+    }
+
+    .info {
+      display: flex;
+      flex-flow: column;
       align-items: center;
       justify-content: center;
+      height: 10em;
+      width: 20em;
+      max-height: 10em;
+      max-width: 20em;
+      padding: 1em;
+      button {
+        margin-top: 1em;
+      }
+    }
+  }
+
+  app-player-grid {
+    // padding: 1em;
+
+    .info {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(0, 0, 0, 0.6);
+      padding: 0.5em 0;
       width: 100%;
-      background: black;
-      padding: 0.5em;
       color: #fff;
+
+      .counter, .player {
+        padding: 0 1em;
+      }
     }
   }
 }
@@ -40,15 +101,22 @@ app-gaming-card {
     height: 9em;
   }
 
+  .active {
+    box-shadow: #FFF 0 -1px 4px, #ff0 0 -2px 10px, #ff8000 0 -10px 20px, red 0 -18px 40px, 5px 5px 15px 5px rgba(0, 0, 0, 0);
+  }
+
   .card {
     border-radius: 0.5em;
     border: 0.5em solid white;
     width: 6em;
     height: 9em;
     cursor: pointer;
+    // background-image: url("assets/hexagon.png");
+    background-size: 3em;
 
     .value {
       display: flex;
+      flex-flow: column;
       width: 100%;
       height: 100%;
       align-items: center;
@@ -56,6 +124,7 @@ app-gaming-card {
       font-size: 3em;
       font-weight: bold;
       pointer-events: none;
+      user-select: none;
       text-shadow: -2px 2px 0px #fff, -2px -2px 0px #fff, 2px -2px 0px #fff, 2px 2px 0px #fff;
     }
 
@@ -65,34 +134,58 @@ app-gaming-card {
       height: 100%;
       align-items: center;
       justify-content: center;
-      font-size: 3em;
-      font-weight: bold;
       pointer-events: none;
-      background: $card-cover;
+      user-select: none;
+      background-image: $card-cover;
+
+      .text {
+        font-size: 1em;
+        font-weight: bold;
+        color: black;
+        transform: rotate(45deg);
+        text-shadow: -2px 2px 0px #fff, -2px -2px 0px #fff, 2px -2px 0px #fff, 2px 2px 0px #fff;
+      }
     }
   }
 
   .c0 {
-    background: purple;
+    background-color: $card_0;
   }
 
   .c1 {
-    background: #c0c0ff;
+    background-color: $card_1;
   }
 
   .c2 {
-    background: green;
+    background-color: $card_2;
   }
 
   .c3 {
-    background: #ee0;
+    background-color: $card_3;
   }
 
   .c4 {
-    background: red;
+    background-color: $card_4;
   }
 }
 
-app-player-grid .content {
-  border: 3px solid black;
+.debug {
+  font-size: 0.5em;
+  font-weight: 0;
+  text-shadow: none;
 }
+
+.value {
+  .debug {
+    font-size: 0.2em;
+  }
+}
+
+@media(max-width: 60em) {
+  app-frame {
+    font-size: 0.6em;
+    flex-flow: column;
+    overflow-y: auto;
+  }
+}
+

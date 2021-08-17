@@ -1,3 +1,8 @@
 $frame-back: #8f8;
 $frame-fore: #000;
-$card-cover: #faa;
+$card_0: #c4c;
+$card_1: #ccf;
+$card_2: #1f1;
+$card_3: #ee0;
+$card_4: red;
+$card-cover: conic-gradient($card_0, $card_1, $card_2, $card_3, $card_4, $card_0);

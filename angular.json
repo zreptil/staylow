@@ -55,7 +55,9 @@
             ],
             "scripts": [],
             "stylePreprocessorOptions": {
-              "includePaths": ["./src/styles"]
+              "includePaths": [
+                "./src/styles"
+              ]
             }
           },
           "configurations": {
@@ -125,6 +127,19 @@
               "src/styles.scss"
             ],
             "scripts": []
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "exclude": [
+              "**/node_modules/**"
+            ],
+            "tsConfig": [
+              "tsconfig.app.json",
+              "tsconfig.spec.json",
+              "e2e/tsconfig.json"
+            ]
           }
         }
       }

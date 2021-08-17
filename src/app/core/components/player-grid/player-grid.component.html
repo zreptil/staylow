@@ -1,8 +1,20 @@
-<table class="content">
-  <tr *ngFor="let row of ss.players[player]?.gameGrid">
-    <td *ngFor="let card of row">
-      <app-gaming-card [data]="card"></app-gaming-card>
-    </td>
-  </tr>
-</table>
-<div class="counter">{{visibleValue}}</div>
+<div class="content">
+  <table [class]="classForTable">
+    <tr *ngFor="let row of ss.players[player]?.gameGrid">
+      <td *ngFor="let card of row">
+        <app-gaming-card [data]="card"></app-gaming-card>
+      </td>
+    </tr>
+  </table>
+  <div class="info">
+    <div class="player">
+      {{ss.players[player]?.name}}
+    </div>
+    <div class="counter">
+      Gesamtpunkte: {{ss.players[player]?.score}}
+    </div>
+    <div class="counter">
+      Sichtbar: {{ss.players[player]?.visibleValue}}
+    </div>
+  </div>
+</div>

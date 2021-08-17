@@ -1,0 +1,17 @@
+{
+  "icons": [
+    {
+      "sizes": "107x107",
+      "src": "assets/logo.png",
+      "type": "image/png"
+    }
+  ],
+  "display": "fullscreen",
+  "name": "StayLow",
+  "permissions": [],
+  "prefer_related_applications": true,
+  "related_applications": [],
+  "short_name": "StayLow",
+  "start_url": "/index.html",
+  "url": "https://staylow.zreptil.de/"
+}

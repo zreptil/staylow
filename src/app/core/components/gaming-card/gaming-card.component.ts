@@ -17,7 +17,7 @@ export class GamingCardComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  onCardClick($event: MouseEvent): void {
-    this.data.covered = !this.data.covered;
+  onCardClick(): void {
+    this.ss.onCardClick(this.data);
   }
 }

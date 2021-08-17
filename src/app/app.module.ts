@@ -9,6 +9,8 @@ import {PlayerGridComponent} from './core/components/player-grid/player-grid.com
 import localeDe from '@angular/common/locales/de';
 import {HttpClientModule} from '@angular/common/http';
 import {registerLocaleData} from '@angular/common';
+import {MaterialModule} from '@/material.module';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 registerLocaleData(localeDe, 'de-DE');
 
@@ -22,7 +24,10 @@ registerLocaleData(localeDe, 'de-DE');
   imports: [
     BrowserModule,
     HttpClientModule,
-    AppRoutingModule
+    AppRoutingModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MaterialModule
   ],
   providers: [],
   bootstrap: [AppComponent]

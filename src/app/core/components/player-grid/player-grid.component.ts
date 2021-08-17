@@ -13,16 +13,10 @@ export class PlayerGridComponent implements OnInit {
   constructor(public ss: SessionService) {
   }
 
-  get visibleValue(): number {
-    const player = this.ss.players[this.player];
-    const grid = player?.gameGrid;
-    let ret = 0;
-    for (const row of grid) {
-      for (const card of row) {
-        if (!card.covered) {
-          ret += card.value;
-        }
-      }
+  get classForTable(): string[] {
+    const ret = [];
+    if (this.ss.currentPlayerIdx >= 0 && this.player !== this.ss.currentPlayerIdx) {
+      ret.push('inactive');
     }
     return ret;
   }

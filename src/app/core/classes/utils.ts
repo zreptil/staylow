@@ -1,6 +1,7 @@
 import {DatePipe} from '@angular/common';
 import {isArray} from 'rxjs/internal-compatibility';
 import {LocaleService} from '@/_services/locale.service';
+import {CardData} from '@/_models/card-data';
 
 export class Utils {
   private static instance: Utils;
@@ -121,7 +122,7 @@ export class Utils {
   // Die Nachkommastellen einer Dezimalzahl abschneiden (nicht runden)
   static cutNumber(value: number, decimalPlaces: number): number {
     const numPower = Math.pow(10, decimalPlaces);
-    // tslint:disable-next-line:no-bitwise
+    // eslint-disable-next-line no-bitwise
     return ~~(value * numPower) / numPower;
   }
 
@@ -164,7 +165,7 @@ export class Utils {
     //     Deswegen schlagen wir hier einen umfangreicheren Weg ein.
     // let ret = src.replace(/(?<!^)([A-Z][a-z]|(?<=[a-z])[A-Z])/g, '_$&');
     let ret = '';
-    // tslint:disable-next-line:forin
+    // eslint-disable-next-line guard-for-in
     for (let i = 0; i < src.length; i++) {
       let c = src.charAt(i);
       if (c >= 'A' && c <= 'Z') {
@@ -190,5 +191,13 @@ export class Utils {
     return props.filter(entry => {
       return regexp.test(entry);
     });
+  }
+
+  static cardsToJson(cards: CardData[]): string {
+    let ret = [];
+    for (const card of cards) {
+      ret.push(`${card.toString()}`);
+    }
+    return Utils.join(ret, '');
   }
 }

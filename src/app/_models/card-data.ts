@@ -1,7 +1,9 @@
 import {Utils} from '@/core/classes/utils';
 
 export class CardData {
-  constructor(private _id: number, public covered: boolean) {
+  constructor(private _id: number,
+              public covered: boolean,
+              public scope: { type: 'player' | 'drawpile' | 'openpile', param?: any }) {
   }
 
   get value(): number {
@@ -17,7 +19,7 @@ export class CardData {
     if (this._id < 30) {
       return -2;
     }
-    return Math.floor((this._id - 30) / 10);
+    return Math.floor((this._id - 30) / 10) + 1;
   }
 
   get cardId(): number {
@@ -29,14 +31,11 @@ export class CardData {
     return idx[this.value + 2];
   }
 
-  get className(): string {
-    const ret = ['card'];
-
-    if (!this.covered) {
-      ret.push(`c${this.colorIdx} v${this.value}`);
-      ret.push(`v${this.value}`);
+  toString(): string {
+    let ret = `${this._id}${this.covered ? '-' : '+'}`;
+    while (ret.length < 4) {
+      ret = `0${ret}`;
     }
-
-    return Utils.join(ret, ' ');
+    return ret;
   }
 }

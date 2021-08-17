@@ -13,24 +13,32 @@ export class FrameComponent implements OnInit {
   }
 
   get hiddenStackCard(): CardData {
-    return this.ss.hiddenStack[0];
+    return this.ss.drawPile[0];
   }
 
   get openStackCard(): CardData {
-    return this.ss.openStack[this.ss.openStack.length - 1];
+    return this.ss.openPile[this.ss.openPile.length - 1];
+  }
+
+  classForGrid(player: number): string[] {
+    const ret = [];
+    if (this.ss.currentPlayerIdx !== player) {
+      ret.push('inactive');
+    }
+    return ret;
   }
 
   ngOnInit(): void {
-    this.ss.shuffle();
-    this.ss.initPlayers();
+    this.ss.initGame();
   }
 
   hiddenStackClick(): void {
-    if (this.ss.hiddenStack.length > 0) {
-      const card = this.ss.getFromStack(this.ss.hiddenStack);
+    if (this.ss.drawPile.length > 0) {
+      const card = this.ss.getFromPile(this.ss.drawPile);
       if (card != null) {
         card.covered = false;
-        this.ss.openStack.push(card);
+        card.scope.type = 'openpile';
+        this.ss.openPile.push(card);
       }
     }
   }

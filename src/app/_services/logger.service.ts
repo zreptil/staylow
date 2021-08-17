@@ -22,7 +22,7 @@ export class LoggerService {
   datepipe: DatePipe = new DatePipe('de-DE');
   public level = LogLevel.debug;
   private logApi: string = null;
-  private user: string = '';
+  private user = '';
 
   constructor(private http: HttpClient) {
   }
@@ -134,7 +134,7 @@ export class LoggerService {
   }
 }
 
-// tslint:disable-next-line:class-name
+// eslint-disable-next-line @typescript-eslint/naming-convention
 export class log {
   private static instance: log;
   public logEvent = new Subject();
