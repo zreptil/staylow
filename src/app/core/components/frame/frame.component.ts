@@ -17,7 +17,7 @@ export class FrameComponent implements OnInit {
   }
 
   get openStackCard(): CardData {
-    return this.ss.openPile[this.ss.openPile.length - 1];
+    return this.ss.openPile[0];
   }
 
   classForGrid(player: number): string[] {
@@ -38,7 +38,7 @@ export class FrameComponent implements OnInit {
       if (card != null) {
         card.covered = false;
         card.scope.type = 'openpile';
-        this.ss.openPile.push(card);
+        this.ss.openPile.splice(0, 0, card);
       }
     }
   }

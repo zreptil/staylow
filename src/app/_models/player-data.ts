@@ -4,6 +4,7 @@ import {Utils} from '@/core/classes/utils';
 export class PlayerData {
   public gameGrid: CardData[][];
   public score: number;
+  public setupDone = false;
 
   constructor(public name: string) {
     this.gameGrid = [];
@@ -18,18 +19,16 @@ export class PlayerData {
     this.score = 0;
   }
 
-  execute(func: string): void {
-  }
-
   get isDone(): boolean {
+    let ret = true;
     for (const row of this.gameGrid) {
       for (const card of row) {
         if (card != null && card.covered) {
-          return false;
+          ret = false;
         }
       }
     }
-    return true;
+    return ret;
   }
 
   get visibleValue(): number {
@@ -45,6 +44,9 @@ export class PlayerData {
       }
     }
     return ret;
+  }
+
+  execute(func: string): void {
   }
 
   finishGame(): void {

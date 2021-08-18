@@ -12,6 +12,9 @@ body {
 
 app-player-grid {
   .content {
+    position: absolute;
+    top: 0;
+    left: 20em;
     width: fit-content;
     margin: 2em;
     outline: 2em solid rgba(0, 0, 0, 0.1);
@@ -30,7 +33,7 @@ app-player-grid {
   align-items: flex-start;
   justify-content: flex-start;
 
-  app-player-grid {
+  _app-player-grid {
     font-size: 0.4em;
   }
 }
@@ -38,8 +41,8 @@ app-player-grid {
 app-frame {
   display: flex;
   height: 100vh;
-  background: $frame-back;
-  color: $frame-fore;
+  background: $frame_back;
+  color: $frame_fore;
   overflow-y: auto;
 
   .stackPanel {
@@ -66,6 +69,7 @@ app-frame {
       max-height: 10em;
       max-width: 20em;
       padding: 1em;
+
       button {
         margin-top: 1em;
       }
@@ -86,6 +90,7 @@ app-frame {
 
       .counter, .player {
         padding: 0 1em;
+        max-width: fit-content;
       }
     }
   }
@@ -125,7 +130,7 @@ app-gaming-card {
       font-weight: bold;
       pointer-events: none;
       user-select: none;
-      text-shadow: -2px 2px 0px #fff, -2px -2px 0px #fff, 2px -2px 0px #fff, 2px 2px 0px #fff;
+      text-shadow: $text_shadow;
     }
 
     .cover {
@@ -143,7 +148,7 @@ app-gaming-card {
         font-weight: bold;
         color: black;
         transform: rotate(45deg);
-        text-shadow: -2px 2px 0px #fff, -2px -2px 0px #fff, 2px -2px 0px #fff, 2px 2px 0px #fff;
+        text-shadow: $text_shadow;
       }
     }
   }

@@ -3,7 +3,7 @@ import {CardData} from '@/_models/card-data';
 import {EnvironmentService} from '@/_services/environment.service';
 import {PlayerData} from '@/_models/player-data';
 import {Utils} from '@/core/classes/utils';
-import {SusiSorglos} from '@/core/classes/susi-sorglos';
+import {Opponent} from '@/core/classes/opponent';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +15,9 @@ export class SessionService {
   public currentPlayerIdx = 0;
   public finalizerIdx = -1;
   public finalizerWasLowest = true;
+  public gameIsOver = false;
   public currentCard: CardData;
+  public isAnimating = false;
   private _gridRows = 3;
   private _gridColumns = 4;
 
@@ -23,10 +25,10 @@ export class SessionService {
     this.mode = 'setup1';
     this.currentPlayerIdx = 0;
     this.players = [];
-    for (let i = 0; i < 1; i++) {
-      this.players.push(new PlayerData(`Spieler ${i + 1}`));
-    }
-    this.players.push(new SusiSorglos(this));
+    this.players.push(new PlayerData(`Spieler 1`));
+    this.players.push(new Opponent(this, 'Susi Sorglos'));
+//    this.players.push(new Opponent(this, 'Hurwanek Krustinak'));
+//    this.players.push(new Opponent(this, 'Peter Lustig'));
 
     this.initGame();
   }
@@ -40,6 +42,9 @@ export class SessionService {
   public set mode(value: string) {
     this._mode = value;
     this.players?.[this.currentPlayerIdx]?.execute(this._mode);
+    // if (!this.env.production && this.mode !== 'waitafter_endOfGame' && this.mode.startsWith('waitafter_')) {
+    //   this.onWaitAfterClick();
+    // }
   }
 
   get inactivePlayers(): number[] {
@@ -61,12 +66,12 @@ export class SessionService {
       setup2: $localize`Noch eine Karte aufdecken`,
       waitafter_setup2: $localize`@nextplayer@ ist dran`,
       drawFromPile: $localize`Eine Karte von einem der Stapel ziehen`,
-      waitafter_drawFromPile: $localize`@nextplayer@ ist dran`,
+      waitafter_round: $localize`@player@ ist dran`,
       placeCard: this.currentCard?.scope.type === 'openpile'
         ? $localize`Eigene Karte ersetzen`
         : $localize`Eigene Karte ersetzen oder auf dem offenen Stapel ablegen`,
       uncoverCard: $localize`Eine verdeckte Karte aufdecken`,
-      waitafter_uncoverCard: $localize`@nextplayer@ ist dran`,
+      waitafter_uncoverCard: $localize`@player@ ist dran`,
       endOfGame: $localize`Ende des Spiels`,
       waitafter_endOfGame: $localize`Nächste Runde spielen`,
     };
@@ -78,6 +83,9 @@ export class SessionService {
       ret = ret.replace(/@player@/g, this.players[this.currentPlayerIdx]?.name);
       ret = ret.replace(/@nextplayer@/g, this.players[this.getNextPlayer()]?.name);
       const p = this.players[this.currentPlayerIdx + 1];
+      if (!this.env.production) {
+        ret += ` - ${this.mode}`;
+      }
       return ret;
     }
     return $localize`Keine Ahnung, was läuft - ${this.mode}`;
@@ -88,10 +96,29 @@ export class SessionService {
     ret.push(this.players[this.finalizerIdx].name);
     ret.push($localize` hat das Spiel beendet`);
     if (!this.finalizerWasLowest) {
-      ret.push($localize`. Da er nicht die wenigsten Punkte hatte, wurden seine Punkte verdoppelt.`);
+      ret.push($localize`. Für die Frechheit, das zu tun und nicht die wenigsten Punkte zu haben, wurden diese verdoppelt.`);
     } else {
       ret.push($localize` und die Runde gewonnen.`);
     }
+
+    // Prüfen, ob das Spiel vorbei ist oder noch eine Runde gespielt werden muss.
+    let minScore = 100000000;
+    this.gameIsOver = false;
+    for (const p of this.players) {
+      if (p.score >= 100) {
+        this.gameIsOver = true;
+      }
+      if (p.score < minScore) {
+        minScore = p.score;
+      }
+    }
+
+    if (this.gameIsOver) {
+      const winners = this.players.filter(p => p.score === minScore).map(entry => entry.name);
+      ret.push($localize`Das Spiel ist vorüber und gewonnen hat: `);
+      ret.push(Utils.join(winners, ', '));
+    }
+
     return Utils.join(ret, '');
   }
 
@@ -121,6 +148,12 @@ export class SessionService {
   }
 
   initGame(): void {
+    if (this.gameIsOver) {
+      for (const p of this.players) {
+        p.score = 0;
+      }
+    }
+    this.gameIsOver = false;
     this.drawPile = [];
     for (let i = 0; i < 150; i++) {
       this.drawPile.push(new CardData(i, true, {type: 'drawpile'}));
@@ -128,12 +161,18 @@ export class SessionService {
     this.openPile = [];
     this.shuffle();
     this.initPlayers();
+    if (this.finalizerIdx >= 0) {
+      this.currentPlayerIdx = this.finalizerIdx;
+      this.finalizerIdx = -1;
+    } else {
+      this.currentPlayerIdx = 0;
+    }
     this.mode = 'setup1';
-    this.currentPlayerIdx = 0;
   }
 
   initPlayers(): void {
     this.players.forEach((p, idx) => {
+      p.setupDone = false;
       for (let i = 0; i < 12; i++) {
         const card = this.getFromDrawPile();
         card.scope.type = 'player';
@@ -144,7 +183,7 @@ export class SessionService {
     const card = this.getFromDrawPile();
     card.covered = false;
     card.scope.type = 'openpile';
-    this.openPile.push(card);
+    this.openPile.splice(0, 0, card);
   }
 
   getFromDrawPile(): CardData {
@@ -200,13 +239,19 @@ export class SessionService {
   }
 
   after_setup2(): void {
-    this.currentPlayerIdx++;
-    if (this.currentPlayerIdx < this.players.length) {
-      this.mode = 'setup1';
-    } else {
-      this.currentPlayerIdx = 0;
+    this.players[this.currentPlayerIdx].setupDone = true;
+    this.currentPlayerIdx = this.getNextPlayer();
+    if (this.players[this.currentPlayerIdx].setupDone) {
       this.mode = 'drawFromPile';
+    } else {
+      this.mode = 'setup1';
     }
+    // if (this.currentPlayerIdx < this.players.length) {
+    //   this.mode = 'setup1';
+    // } else {
+    //   this.currentPlayerIdx = 0;
+    //   this.mode = 'drawFromPile';
+    // }
   }
 
   click_drawFromPile(card: CardData): void {
@@ -215,7 +260,7 @@ export class SessionService {
       this.currentCard = this.drawPile[0];
       this.mode = 'placeCard';
     } else if (card.scope.type === 'openpile') {
-      this.currentCard = this.openPile[this.openPile.length - 1];
+      this.currentCard = this.openPile[0];
       this.mode = 'placeCard';
     }
   }
@@ -233,9 +278,9 @@ export class SessionService {
         }
         card.scope.type = 'openpile';
         card.covered = false;
-        this.openPile.push(card);
+        this.openPile.splice(0, 0, card);
         this.currentCard = null;
-        this.mode = 'waitafter_drawFromPile';
+        this.mode = 'waitafter_round';
       }
     } else if (card === this.currentCard && card.scope.type === 'openpile') {
       this.currentCard = null;
@@ -244,13 +289,9 @@ export class SessionService {
       this.mode = 'uncoverCard';
       this.currentCard = this.getFromDrawPile();
       this.currentCard.scope.type = 'openpile';
-      this.openPile.push(this.currentCard);
+      this.openPile.splice(0, 0, this.currentCard);
       this.currentCard = null;
     }
-  }
-
-  after_drawFromPile(): void {
-    this.nextPlayer();
   }
 
   click_uncoverCard(card: CardData): void {
@@ -262,8 +303,15 @@ export class SessionService {
     }
   }
 
+  after_round(): void {
+    this.after_uncoverCard();
+  }
+
   after_uncoverCard(): void {
     this.nextPlayer();
+    if (this.finalizerIdx < 0) {
+      this.mode = 'drawFromPile';
+    }
   }
 
   getNextPlayer(): number {
@@ -281,13 +329,14 @@ export class SessionService {
       for (const card of cards) {
         card.scope.type = 'openpile';
         card.covered = false;
-        this.openPile.push(card);
+        this.openPile.splice(0, 0, card);
       }
     }
     this.currentPlayerIdx = this.getNextPlayer();
     if (this.players[this.currentPlayerIdx].isDone) {
-      this.finalizerIdx = this.currentPlayerIdx;
-      this.mode = 'waitafter_endOfGame';
+      if (this.finalizerIdx < 0) {
+        this.finalizerIdx = this.currentPlayerIdx;
+      }
       const check = this.players[this.finalizerIdx].visibleValue;
       this.finalizerWasLowest = true;
       this.players.forEach((p, idx) => {
@@ -303,9 +352,16 @@ export class SessionService {
           p.score += p.visibleValue;
         }
       });
-      return;
+      this.mode = 'waitafter_endOfGame';
     }
-    this.mode = 'drawFromPile';
+  }
+
+  startRound(): void {
+    if (this.players[this.currentPlayerIdx].setupDone) {
+      this.mode = 'drawFromPile';
+    } else {
+      this.mode = 'setup1';
+    }
   }
 
   after_endOfGame(): void {

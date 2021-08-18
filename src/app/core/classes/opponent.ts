@@ -1,14 +1,19 @@
 import {SessionService} from '@/_services/session.service';
 import {PlayerData} from '@/_models/player-data';
 import {CardData} from '@/_models/card-data';
+import {log} from '@/_services/logger.service';
 
-export abstract class OpponentBase extends PlayerData {
+export class Opponent extends PlayerData {
   constructor(public ss: SessionService,
               name: string) {
     super(name);
   }
 
   execute(func: string): void {
+    if (this.isDone) {
+      this.ss.nextPlayer();
+      return;
+    }
     let cmd = `exec_${func}`;
     if (this[cmd]) {
       const card = this[cmd]();
@@ -20,15 +25,15 @@ export abstract class OpponentBase extends PlayerData {
   }
 
   exec_setup1(): CardData {
-    return this.exec_uncoverCard();
+    return this.selectCoveredCard();
   }
 
   exec_setup2(): CardData {
-    return this.exec_uncoverCard();
+    return this.selectCoveredCard();
   }
 
   exec_drawFromPile(): CardData {
-    const card = this.ss.openPile[this.ss.openPile.length - 1];
+    const card = this.ss.openPile[0];
     if (card.value < 5) {
       return card;
     }
@@ -36,23 +41,29 @@ export abstract class OpponentBase extends PlayerData {
   }
 
   exec_placeCard(): CardData {
-    const card = this.findHighestCard();
+    let card = this.findHighestCard();
+    console.log('high', card);
     if (card != null && card.value > 4) {
       return card;
     }
+    card = null;
     if (this.ss.currentCard.scope.type === 'openpile') {
-      return this.exec_uncoverCard();
+      card = this.exec_uncoverCard();
     } else {
-      return this.ss.openPile[this.ss.openPile.length - 1];
+      card = this.ss.openPile[0];
     }
-    return null;
+    return card;
+  }
+
+  exec_uncoverCard(): CardData {
+    return this.selectCoveredCard();
   }
 
   findHighestCard(): CardData {
     let found = null;
     for (const row of this.gameGrid) {
       for (const card of row) {
-        if (!card.covered && card.value > found?.value) {
+        if (card != null && !card.covered && card.value > (found?.value || -3)) {
           found = card;
         }
       }
@@ -60,7 +71,7 @@ export abstract class OpponentBase extends PlayerData {
     return found;
   }
 
-  exec_uncoverCard(): CardData {
+  selectCoveredCard(): CardData {
     let x, y;
     do {
       y = Math.floor(Math.random() * this.gameGrid.length);
@@ -68,18 +79,4 @@ export abstract class OpponentBase extends PlayerData {
     } while (!this.gameGrid[y][x].covered);
     return this.gameGrid[y][x];
   }
-
-  /*      setup1: $localize`Eine Karte aufdecken`,
-        setup2: $localize`Noch eine Karte aufdecken`,
-        waitafter_setup2: $localize`@nextplayer@ ist dran`,
-        drawFromPile: $localize`Eine Karte von einem der Stapel ziehen`,
-        waitafter_drawFromPile: $localize`@nextplayer@ ist dran`,
-        placeCard: this.currentCard?.scope.type === 'openpile'
-          ? $localize`Eigene Karte ersetzen`
-          : $localize`Eigene Karte ersetzen oder auf dem offenen Stapel ablegen`,
-        uncoverCard: $localize`Eine verdeckte Karte aufdecken`,
-        waitafter_uncoverCard: $localize`@nextplayer@ ist dran`,
-        endOfGame: $localize`Ende des Spiels`,
-        waitafter_endOfGame: $localize`Nächste Runde spielen`,
-  */
 }
