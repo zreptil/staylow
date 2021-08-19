@@ -1,11 +1,11 @@
-<div [@activate]="isActive ? 'active' : 'inactive'"
+<div (@activate.done)="onActivateDone($event)"
      (@activate.start)="onActivateStart($event)"
-     (@activate.done)="onActivateDone($event)"
+     [@activate]="isActive ? 'active' : 'inactive'"
      class="content">
   <table [class]="classForTable">
     <tr *ngFor="let row of ss.players[player]?.gameGrid">
       <td *ngFor="let card of row">
-        <app-gaming-card [data]="card"></app-gaming-card>
+        <app-gaming-card [card]="card"></app-gaming-card>
       </td>
     </tr>
   </table>

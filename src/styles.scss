@@ -53,9 +53,21 @@ app-frame {
     .stacks {
       display: flex;
       flex-flow: row;
+      min-width: 14em;
 
       app-gaming-card {
         padding: 0.5em;
+      }
+
+      .hiddenstack {
+        position: relative;
+        min-width: 8em;
+
+        app-gaming-card {
+          position: absolute;
+          left: 0;
+          top: 0;
+        }
       }
     }
 

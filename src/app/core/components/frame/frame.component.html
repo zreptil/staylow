@@ -1,16 +1,19 @@
 <div class="stackPanel">
+  <div class="stacks">
+    <div class="hiddenstack">
+      <app-gaming-card [card]="hiddenStackCard1"></app-gaming-card>
+      <app-gaming-card [card]="hiddenStackCard"></app-gaming-card>
+    </div>
+    <app-gaming-card [card]="openStackCard"></app-gaming-card>
+  </div>
   <div class="info">
     <ng-container *ngIf="!this.ss.isAnimating">
       <div>{{ss.gameInfo}}</div>
-      <button mat-raised-button color="primary" (click)="ss.onWaitAfterClick()" *ngIf="ss.mode.startsWith('waitafter_')"
-              i18n>
+      <button (click)="ss.onWaitAfterClick()" *ngIf="ss.mode.startsWith('waitafter_')" color="primary" i18n
+              mat-raised-button>
         Weiter
       </button>
     </ng-container>
-  </div>
-  <div class="stacks">
-    <app-gaming-card [data]="hiddenStackCard"></app-gaming-card>
-    <app-gaming-card [data]="openStackCard"></app-gaming-card>
   </div>
 </div>
 <app-player-grid *ngFor="let p of ss.players, let idx = index" [player]="idx"></app-player-grid>

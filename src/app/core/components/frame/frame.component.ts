@@ -12,6 +12,10 @@ export class FrameComponent implements OnInit {
   constructor(public ss: SessionService) {
   }
 
+  get hiddenStackCard1(): CardData {
+    return this.ss.drawPile.length > 1 ? this.ss.drawPile[1] : null;
+  }
+
   get hiddenStackCard(): CardData {
     return this.ss.drawPile[0];
   }
@@ -36,7 +40,7 @@ export class FrameComponent implements OnInit {
     if (this.ss.drawPile.length > 0) {
       const card = this.ss.getFromPile(this.ss.drawPile);
       if (card != null) {
-        card.covered = false;
+        card.uncover();
         card.scope.type = 'openpile';
         this.ss.openPile.splice(0, 0, card);
       }

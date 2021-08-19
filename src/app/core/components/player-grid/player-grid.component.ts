@@ -1,7 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {SessionService} from '@/_services/session.service';
 import {animate, state, style, transition, trigger} from '@angular/animations';
-import {log} from '@/_services/logger.service';
 
 @Component({
   selector: 'app-player-grid',
@@ -15,13 +14,14 @@ import {log} from '@/_services/logger.service';
           left: '20em'
         })),
         state('inactive', style({
-          fontSize: '0.4em',
-          left: '135em'
+          fontSize: '0.6em',
+          left: '90em',
         })),
         transition('inactive <=> active', [animate('1s')])
       ]),
   ]
 })
+
 export class PlayerGridComponent implements OnInit {
   @Input()
   player: number;
@@ -43,13 +43,13 @@ export class PlayerGridComponent implements OnInit {
 
   onActivateStart(event: any) {
     this.ss.isAnimating = true;
+    console.error('onActivateStart', this.ss.players[this.ss.currentPlayerIdx].name, this.isActive);
   }
 
   onActivateDone(event: any) {
-    this.ss.isAnimating = false;
-    if (this.player === this.ss.currentPlayerIdx) {
-      console.log('feddich und dran ist:', this.ss.players[this.player].name);
-      console.log(this.ss);
+    console.error('onActivateDone', this.ss.players[this.ss.currentPlayerIdx].name, this.isActive);
+    setTimeout(() => this.ss.isAnimating = false, 1);
+    if (this.isActive) {
       this.ss.startRound();
     }
   }

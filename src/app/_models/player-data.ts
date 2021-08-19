@@ -23,7 +23,7 @@ export class PlayerData {
     let ret = true;
     for (const row of this.gameGrid) {
       for (const card of row) {
-        if (card != null && card.covered) {
+        if (card != null && card.isCovered) {
           ret = false;
         }
       }
@@ -37,7 +37,22 @@ export class PlayerData {
     if (grid != null) {
       for (const row of grid) {
         for (const card of row) {
-          if (card != null && !card.covered) {
+          if (card != null && !card.isCovered) {
+            ret += card.value;
+          }
+        }
+      }
+    }
+    return ret;
+  }
+
+  get overallValue(): number {
+    const grid = this.gameGrid;
+    let ret = 0;
+    if (grid != null) {
+      for (const row of grid) {
+        for (const card of row) {
+          if (card != null) {
             ret += card.value;
           }
         }
@@ -53,7 +68,7 @@ export class PlayerData {
     for (const row of this.gameGrid) {
       for (const card of row) {
         if (card != null) {
-          card.covered = false;
+          card.uncover();
         }
       }
     }
@@ -66,7 +81,7 @@ export class PlayerData {
       if (this.gameGrid[0][x] != null) {
         const v = this.gameGrid[0][x].value;
         while (y < this.gameGrid.length
-        && !this.gameGrid[y][x].covered
+        && !this.gameGrid[y][x].isCovered
         && this.gameGrid[y][x].value === v) {
           y++;
         }

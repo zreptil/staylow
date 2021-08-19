@@ -1,22 +1,28 @@
-<div (click)="onCardClick()" *ngIf="data?.cardId == null" class="empty">
+<div (click)="onCardClick()" *ngIf="card?.cardId == null" class="empty">
   &nbsp;
 </div>
-<div (click)="onCardClick()" *ngIf="data?.cardId != null" [class]="ss.getClassForCard(data)">
-  <div *ngIf="!data.covered" class="value">
-    <div>{{data.value}}</div>
+<div (@uncover.done)="onUncoverDone($event)"
+     (@uncover.start)="onUncoverStart($event)"
+     (click)="onCardClick()"
+     *ngIf="card?.cardId != null"
+     [@uncover]="card.animationState"
+     [@.disabled]="card.noAnimation"
+     [class]="ss.getClassForCard(card)">
+  <div *ngIf="!card.coveredState" class="value">
+    <div>{{card.value}}</div>
     <div *ngIf="!ss.env.production" class="debug">
-      {{data.cardId}}-{{data.scope.type}}
-      <ng-container *ngIf="data.scope.type==='openpile'">
+      {{card.cardId}}-{{card.scope.type}}
+      <ng-container *ngIf="card.scope.type==='openpile'">
         {{ss.openPile.length}}
       </ng-container>
     </div>
   </div>
-  <div *ngIf="data.covered" class="cover">
+  <div *ngIf="card.coveredState" class="cover">
     <div class="text">
       {{ss.env.appName}}
       <div *ngIf="!ss.env.production" class="debug">
-        {{data.cardId}}-{{data.scope.type}}
-        <ng-container *ngIf="data.scope.type==='drawpile'">
+        {{card.cardId}}-{{card.scope.type}}
+        <ng-container *ngIf="card.scope.type==='drawpile'">
           {{ss.drawPile.length}}
         </ng-container>
       </div>

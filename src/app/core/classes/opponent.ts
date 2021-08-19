@@ -16,9 +16,11 @@ export class Opponent extends PlayerData {
     }
     let cmd = `exec_${func}`;
     if (this[cmd]) {
+      log.error(this.name, cmd);
       const card = this[cmd]();
       if (card != null) {
         cmd = `click_${func}`;
+        log.info(this.name, cmd, card);
         this.ss[cmd](card);
       }
     }
@@ -63,7 +65,7 @@ export class Opponent extends PlayerData {
     let found = null;
     for (const row of this.gameGrid) {
       for (const card of row) {
-        if (card != null && !card.covered && card.value > (found?.value || -3)) {
+        if (card != null && !card.isCovered && card.value > (found?.value || -3)) {
           found = card;
         }
       }
@@ -76,7 +78,7 @@ export class Opponent extends PlayerData {
     do {
       y = Math.floor(Math.random() * this.gameGrid.length);
       x = Math.floor(Math.random() * this.gameGrid[0].length);
-    } while (!this.gameGrid[y][x].covered);
+    } while (!this.gameGrid[y][x].isCovered);
     return this.gameGrid[y][x];
   }
 }

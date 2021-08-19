@@ -1,9 +1,36 @@
-import {Utils} from '@/core/classes/utils';
-
 export class CardData {
+  public animationState = '';
+
   constructor(private _id: number,
-              public covered: boolean,
+              public _covered: boolean,
               public scope: { type: 'player' | 'drawpile' | 'openpile', param?: any }) {
+  }
+
+  get noAnimation(): boolean {
+    if (this.animationState.startsWith('beg')
+      || this.animationState.startsWith('mid')
+      || this.animationState.startsWith('end')) {
+      return false;
+    }
+    return true;
+  }
+
+  get coveredState(): boolean {
+    switch (this.animationState) {
+      case 'begUncover':
+      case 'midUncover':
+      case 'endCover':
+        return true;
+      case 'begCover':
+      case 'midCover':
+      case 'endUncover':
+        return false;
+    }
+    return this._covered;
+  }
+
+  get isCovered(): boolean {
+    return this._covered;
   }
 
   get value(): number {
@@ -19,6 +46,7 @@ export class CardData {
     if (this._id < 30) {
       return -2;
     }
+    // 30 - 149 => 1 bis 12
     return Math.floor((this._id - 30) / 10) + 1;
   }
 
@@ -31,8 +59,20 @@ export class CardData {
     return idx[this.value + 2];
   }
 
+  uncover(): void {
+    if (this._covered) {
+      this.animationState = 'begUncover';
+    }
+  }
+
+  cover(): void {
+    if (!this._covered) {
+      this.animationState = 'begCover';
+    }
+  }
+
   toString(): string {
-    let ret = `${this._id}${this.covered ? '-' : '+'}`;
+    let ret = `${this._id}${this._covered ? '-' : '+'}`;
     while (ret.length < 4) {
       ret = `0${ret}`;
     }
