@@ -1,5 +1,6 @@
 $frame_back: #8f8;
 $frame_fore: #000;
+$grid_back: #fc3;
 $card_0: #c4c;
 $card_1: #ccf;
 $card_2: #1f1;
@@ -9,3 +10,5 @@ $card_cover: conic-gradient($card_0, $card_1, $card_2, $card_3, $card_4, $card_0
 $tp: 0.05em;
 $tm: -0.05em;
 $text_shadow: $tm $tp 0px #fff, $tm $tm 0px #fff, $tp $tm 0px #fff, $tp $tp 0px #fff;
+$text_stroke: $tp white;
+$active_left: 20em;

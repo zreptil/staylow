@@ -50,10 +50,10 @@ export class LoggerService {
       method = console.error;
     }
 
-    if (!environment.production) {
+    if (false && !environment.production) {
       const caller = (new Error()).stack?.split('\n')[3].trim();
 
-      method(this.timestamp, info, message, ...optionalParams, caller);
+      method(message, ...optionalParams, caller, this.timestamp, info);
     } else {
       method(info, message, ...optionalParams);
     }

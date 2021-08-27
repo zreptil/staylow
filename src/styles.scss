@@ -1,208 +1,287 @@
 @import 'styles/color-vars.scss';
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
 
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+::-webkit-scrollbar-track {
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
 body {
-  display: block;
-  width: 100vw;
+  display: flex;
+  flex-flow: column;
   height: 100vh;
   margin: 0;
   padding: 0;
   font-family: Roboto, Verdana, Tahoma, Arial, sans-serif;
-}
+  background-color: $frame_back;
+  background-image: url("assets/boards/board0.png");
+  overflow-x: hidden;
 
-app-player-grid {
-  .content {
-    position: absolute;
-    top: 0;
-    left: 20em;
-    width: fit-content;
-    margin: 2em;
-    outline: 2em solid rgba(0, 0, 0, 0.1);
-    background-color: #a83;
+  app-root {
+    width: 100%;
+    height: 100%;
   }
 
-  .inactive {
-  }
-}
-
-.inactivePanel {
-  display: flex;
-  flex: 1;
-  flex-wrap: wrap;
-  overflow-y: auto;
-  align-items: flex-start;
-  justify-content: flex-start;
-
-  _app-player-grid {
-    font-size: 0.4em;
-  }
-}
-
-app-frame {
-  display: flex;
-  height: 100vh;
-  background: $frame_back;
-  color: $frame_fore;
-  overflow-y: auto;
-
-  .stackPanel {
+  app-frame {
     display: flex;
-    flex-flow: column;
-    align-items: center;
+    flex-flow: row;
+    color: $frame_fore;
+    _border: 10px solid rgba(255, 255, 255, 0.5);
+    align-items: flex-start;
+    justify-content: center;
+    height: 100%;
 
-    .stacks {
+    .dbg-info {
+      position: absolute;
+      bottom: 1em;
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 1em;
+      padding: 1em;
+    }
+
+    .stackPanel {
       display: flex;
-      flex-flow: row;
-      min-width: 14em;
+      flex-flow: column;
+      align-items: center;
+      width: 20em;
 
-      app-gaming-card {
-        padding: 0.5em;
-      }
-
-      .hiddenstack {
-        position: relative;
-        min-width: 8em;
+      .stacks {
+        display: flex;
+        flex-flow: row;
+        min-width: 14em;
+        margin-top: 1em;
+        height: 12em;
 
         app-gaming-card {
-          position: absolute;
-          left: 0;
-          top: 0;
+          padding: 0.5em;
+        }
+
+        .pile {
+          position: relative;
+          min-width: 8em;
+
+          app-gaming-card {
+            position: absolute;
+            left: 0;
+            top: 0;
+          }
+        }
+      }
+
+      .info {
+        display: flex;
+        flex-flow: column;
+        align-items: center;
+        justify-content: center;
+        background: rgba(255, 255, 255, 0.5);
+        width: calc(#{$active_left} - 1em);
+        border-radius: 1em;
+        margin-bottom: 1em;
+
+        button {
+          margin: 1em;
+        }
+
+        div {
+          padding: 1em;
         }
       }
     }
 
-    .info {
+    app-player-grid {
       display: flex;
       flex-flow: column;
-      align-items: center;
-      justify-content: center;
-      height: 10em;
-      width: 20em;
-      max-height: 10em;
-      max-width: 20em;
-      padding: 1em;
+      flex: 1;
+      overflow-x: auto;
+      overflow-y: hidden;
 
-      button {
-        margin-top: 1em;
+      .playerPanel {
+        display: flex;
+        flex-flow: row;
+
+        .player {
+          display: flex;
+          height: fit-content;
+
+          .name {
+            font-size: 0.7em;
+          }
+        }
+
+        .board {
+          background-color: $grid_back;
+          padding: 0.5em;
+        }
+
+        .info {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          background: rgba(0, 0, 0, 0.5);
+          padding: 0.5em 0;
+          width: 100%;
+          color: #fff;
+
+          .counter, .player {
+            padding: 0 1em;
+            max-width: fit-content;
+          }
+
+          .player {
+            display: flex;
+            flex-flow: column;
+            align-items: center;
+            justify-content: center;
+
+            .avatar {
+              width: 4em;
+            }
+          }
+        }
+
+        .dbg-info {
+          justify-content: center;
+          text-transform: uppercase;
+          color: rgba(255, 255, 255, 0.6);
+        }
       }
     }
   }
 
-  app-player-grid {
-    // padding: 1em;
-
-    .info {
+  app-gaming-card {
+    .empty {
+      border: 0.5em solid transparent;
       display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: rgba(0, 0, 0, 0.6);
-      padding: 0.5em 0;
-      width: 100%;
-      color: #fff;
-
-      .counter, .player {
-        padding: 0 1em;
-        max-width: fit-content;
-      }
-    }
-  }
-}
-
-app-gaming-card {
-  .empty {
-    border: 0.5em solid transparent;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 6em;
-    height: 9em;
-  }
-
-  .active {
-    box-shadow: #FFF 0 -1px 4px, #ff0 0 -2px 10px, #ff8000 0 -10px 20px, red 0 -18px 40px, 5px 5px 15px 5px rgba(0, 0, 0, 0);
-  }
-
-  .card {
-    border-radius: 0.5em;
-    border: 0.5em solid white;
-    width: 6em;
-    height: 9em;
-    cursor: pointer;
-    // background-image: url("assets/hexagon.png");
-    background-size: 3em;
-
-    .value {
-      display: flex;
-      flex-flow: column;
-      width: 100%;
-      height: 100%;
       align-items: center;
       justify-content: center;
-      font-size: 3em;
-      font-weight: bold;
-      pointer-events: none;
-      user-select: none;
-      text-shadow: $text_shadow;
+      width: 6em;
+      height: 9em;
     }
 
-    .cover {
-      display: flex;
-      width: 100%;
-      height: 100%;
-      align-items: center;
-      justify-content: center;
-      pointer-events: none;
-      user-select: none;
-      background-image: $card-cover;
+    .active {
+      box-shadow: $card_1 0 0 0 2px, $card_0 0 0 0 4px, $card_2 0 0 0 6px, $card_3 0 0 0 8px, $card_4 0 0 0 10px !important;
+    }
 
-      .text {
-        font-size: 1em;
+    .card {
+      border-radius: 0.5em;
+      border: 0.5em solid white;
+      box-shadow: 0 0 0 1px black;
+      width: 6em;
+      height: 9em;
+      cursor: pointer;
+      // background-image: url("assets/hexagon.png");
+      background-size: 3em;
+
+      .value {
+        display: flex;
+        flex-flow: column;
+        width: 100%;
+        height: 100%;
+        align-items: center;
+        justify-content: center;
+        font-size: 3em;
         font-weight: bold;
-        color: black;
-        transform: rotate(45deg);
+        pointer-events: none;
+        user-select: none;
         text-shadow: $text_shadow;
+        // -webkit-text-stroke: $text_stroke;
       }
+
+      .cover {
+        display: flex;
+        width: 100%;
+        height: 100%;
+        align-items: center;
+        justify-content: center;
+        pointer-events: none;
+        user-select: none;
+        background-image: $card-cover;
+
+        .text {
+          font-size: 1em;
+          font-weight: bold;
+          color: black;
+          transform: rotate(45deg);
+          text-shadow: $text_shadow;
+          // -webkit-text-stroke: $text_stroke;
+        }
+      }
+    }
+
+    .c0 {
+      background-color: $card_0;
+    }
+
+    .c1 {
+      background-color: $card_1;
+    }
+
+    .c2 {
+      background-color: $card_2;
+    }
+
+    .c3 {
+      background-color: $card_3;
+    }
+
+    .c4 {
+      background-color: $card_4;
     }
   }
 
-  .c0 {
-    background-color: $card_0;
-  }
-
-  .c1 {
-    background-color: $card_1;
-  }
-
-  .c2 {
-    background-color: $card_2;
-  }
-
-  .c3 {
-    background-color: $card_3;
-  }
-
-  .c4 {
-    background-color: $card_4;
-  }
-}
-
-.debug {
-  font-size: 0.5em;
-  font-weight: 0;
-  text-shadow: none;
-}
-
-.value {
   .debug {
-    font-size: 0.2em;
+    font-size: 0.5em;
+    font-weight: 0;
+    text-shadow: none;
+    // -webkit-text-stroke: 0 black;
+  }
+
+  .value {
+    .debug {
+      font-size: 0.2em;
+    }
+  }
+
+  @media(max-width: 65em) {
+    app-frame {
+      flex-flow: column;
+      overflow-y: auto;
+      justify-content: flex-start;
+      align-items: center;
+
+      app-player-grid {
+        overflow-x: hidden;
+        overflow-y: auto;
+        width: 100%;
+        align-items: center;
+
+        .playerPanel {
+          flex-flow: column;
+          font-size: 1.5em;
+        }
+      }
+    }
+
+    .board {
+      table {
+        font-size: 0.8em;
+      }
+    }
+  }
+  @media(max-width: 40em) {
+    app-frame {
+      app-player-grid {
+        .playerPanel {
+          font-size: 1.3em;
+        }
+      }
+    }
   }
 }
-
-@media(max-width: 60em) {
-  app-frame {
-    font-size: 0.6em;
-    flex-flow: column;
-    overflow-y: auto;
-  }
-}
-

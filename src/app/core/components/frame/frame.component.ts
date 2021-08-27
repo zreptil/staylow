@@ -7,17 +7,21 @@ import {CardData} from '@/_models/card-data';
   templateUrl: './frame.component.html',
   styleUrls: ['./frame.component.scss']
 })
-export class FrameComponent implements OnInit {
+export class FrameComponent {
 
   constructor(public ss: SessionService) {
   }
 
-  get hiddenStackCard1(): CardData {
+  get hiddenStackCardPre(): CardData {
     return this.ss.drawPile.length > 1 ? this.ss.drawPile[1] : null;
   }
 
   get hiddenStackCard(): CardData {
     return this.ss.drawPile[0];
+  }
+
+  get openStackCardPre(): CardData {
+    return this.ss.openPile.length > 1 ? this.ss.openPile[1] : null;
   }
 
   get openStackCard(): CardData {
@@ -30,10 +34,6 @@ export class FrameComponent implements OnInit {
       ret.push('inactive');
     }
     return ret;
-  }
-
-  ngOnInit(): void {
-    this.ss.initGame();
   }
 
   hiddenStackClick(): void {

@@ -1,23 +1,29 @@
-<div (@activate.done)="onActivateDone($event)"
-     (@activate.start)="onActivateStart($event)"
-     [@activate]="isActive ? 'active' : 'inactive'"
-     class="content">
-  <table [class]="classForTable">
-    <tr *ngFor="let row of ss.players[player]?.gameGrid">
-      <td *ngFor="let card of row">
-        <app-gaming-card [card]="card"></app-gaming-card>
-      </td>
-    </tr>
-  </table>
-  <div class="info">
-    <div class="player">
-      {{ss.players[player]?.name}}
-    </div>
-    <div class="counter">
-      Gesamtpunkte: {{ss.players[player]?.score}}
-    </div>
-    <div class="counter">
-      Sichtbar: {{ss.players[player]?.visibleValue}}
+<div class="playerPanel">
+  <div *ngFor="let player of ss.players, let idx = index"
+       [style]="playerStyle(idx)"
+       class="player">
+    <div [style]="boardStyle(idx)" class="board">
+      <table [class]="classForTable(idx)">
+        <tr *ngFor="let row of player.gameGrid">
+          <td *ngFor="let card of row">
+            <app-gaming-card [card]="card"></app-gaming-card>
+          </td>
+        </tr>
+      </table>
+      <div class="info">
+        <div class="player">
+          <div class="name">{{player.name}}</div>
+          <img *ngIf="player.avatar!=''"
+               class="avatar"
+               src="assets/avatars/{{player.avatar}}.png">
+        </div>
+        <div class="counter">
+          Gesamtpunkte: {{player.score}}
+        </div>
+        <div class="counter">
+          Sichtbar: {{player.visibleValue}}
+        </div>
+      </div>
     </div>
   </div>
 </div>

@@ -12,6 +12,7 @@ import {HttpClientModule} from '@angular/common/http';
 import {registerLocaleData} from '@angular/common';
 import {MaterialModule} from '@/material.module';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {LayoutModule} from '@angular/cdk/layout';
 
 registerLocaleData(localeDe, 'de-DE');
 
@@ -24,6 +25,7 @@ registerLocaleData(localeDe, 'de-DE');
   ],
   imports: [
     BrowserModule,
+    LayoutModule,
     BrowserAnimationsModule,
     HttpClientModule,
     AppRoutingModule,

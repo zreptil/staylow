@@ -2,7 +2,6 @@ import {Component, Input, OnInit} from '@angular/core';
 import {CardData} from '@/_models/card-data';
 import {SessionService} from '@/_services/session.service';
 import {animate, keyframes, style, transition, trigger} from '@angular/animations';
-import {log} from '@/_services/logger.service';
 
 @Component({
   selector: 'app-gaming-card',
@@ -11,22 +10,26 @@ import {log} from '@/_services/logger.service';
   animations: [
     trigger('uncover',
       [
-        transition('begUncover => midUncover', [animate('0.5s', keyframes([
-          style({offset: 0, transform: 'rotate3d(0,0,0,0deg)'}),
-          style({offset: 1, transform: 'rotate3d(0,1,0,90deg)'}),
-        ]))]),
-        transition('midUncover => endUncover', [animate('0.5s', keyframes([
+        transition('begUncover => midUncover', [
+          animate(GamingCardComponent.animDuration, keyframes([
+            style({offset: 0, transform: 'rotate3d(0,0,0,0deg)'}),
+            style({offset: 1, transform: 'rotate3d(0,1,0,90deg)'}),
+          ]))]),
+        transition('midUncover => endUncover', [
+          animate(GamingCardComponent.animDuration, keyframes([
           style({offset: 0, transform: 'rotate3d(0,1,0,90deg)'}),
           style({offset: 1, transform: 'rotate3d(0,0,0,0deg)'}),
         ]))])
       ]),
     trigger('cover',
       [
-        transition('begCover => midCover', [animate('0.5s', keyframes([
+        transition('begCover => midCover', [
+          animate(GamingCardComponent.animDuration, keyframes([
           style({offset: 0, transform: 'rotate3d(0,0,0,0deg)'}),
           style({offset: 1, transform: 'rotate3d(0,1,0,90deg)'}),
         ]))]),
-        transition('midCover => endCover', [animate('0.5s', keyframes([
+        transition('midCover => endCover', [
+          animate(GamingCardComponent.animDuration, keyframes([
           style({offset: 0, transform: 'rotate3d(0,1,0,90deg)'}),
           style({offset: 1, transform: 'rotate3d(0,0,0,0deg)'}),
         ]))])
@@ -34,6 +37,7 @@ import {log} from '@/_services/logger.service';
   ]
 })
 export class GamingCardComponent implements OnInit {
+  static animDuration = '0.2s';
 
   @Input()
   card: CardData;
@@ -52,16 +56,23 @@ export class GamingCardComponent implements OnInit {
   }
 
   onUncoverDone(event: any) {
-    switch(this.card.animationState) {
+    switch (this.card?.animationState) {
       case 'begUncover':
-        this.card.animationState = 'midUncover';
+        setTimeout(() => this.card.animationState = 'midUncover', 1);
         break;
       case 'midUncover':
-        this.card.animationState = 'endUncover';
+        setTimeout(() => this.card.animationState = 'endUncover', 1);
         break;
       case 'endUncover':
-        this.card.animationState = '';
         this.card._covered = false;
+        this.card.animationState = '';
+        const mode = this.card.modeAfterAnimation;
+        this.card.modeAfterAnimation = null;
+        if (mode != null) {
+          if (this.ss.mode !== 'waitafter_endOfGame') {
+            this.ss.mode = mode;
+          }
+        }
         break;
     }
   }

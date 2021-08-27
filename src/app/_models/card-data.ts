@@ -1,5 +1,15 @@
 export class CardData {
   public animationState = '';
+  public _modeAfterAnimation = '';
+
+  public get modeAfterAnimation(): string {
+    return this._modeAfterAnimation;
+  }
+
+  public set modeAfterAnimation(value: string) {
+    console.error('set modeAfterAnimation', value);
+    this._modeAfterAnimation = value;
+  }
 
   constructor(private _id: number,
               public _covered: boolean,
@@ -69,6 +79,10 @@ export class CardData {
     if (!this._covered) {
       this.animationState = 'begCover';
     }
+  }
+
+  get forLog(): string {
+    return `${this._id}${this._covered ? '-' : '+'}${this.scope.type}${this.scope.param}`;
   }
 
   toString(): string {

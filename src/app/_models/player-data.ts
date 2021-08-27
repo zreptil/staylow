@@ -4,26 +4,29 @@ import {Utils} from '@/core/classes/utils';
 export class PlayerData {
   public gameGrid: CardData[][];
   public score: number;
+  public board = 1;
+  public avatar = null;
   public setupDone = false;
+  public name: string;
+  public brain: any;
 
-  constructor(public name: string) {
-    this.gameGrid = [];
-    for (let y = 0; y < 3; y++) {
-      const row = [];
-      for (let x = 0; x < 4; x++) {
-        row.push(new CardData(0, true, {type: 'player', param: this}));
-      }
-
-      this.gameGrid.push(row);
-    }
+  constructor({name = 'Spieler', brain = null, board = 1, avatar = null}) {
+    this.name = name;
+    this.brain = brain;
+    this.board = board;
+    this.avatar = avatar;
+    this.reset();
     this.score = 0;
+    if (brain != null) {
+      brain.player = this;
+    }
   }
 
   get isDone(): boolean {
     let ret = true;
     for (const row of this.gameGrid) {
       for (const card of row) {
-        if (card != null && card.isCovered) {
+        if (card != null && card.coveredState) {
           ret = false;
         }
       }
@@ -61,14 +64,43 @@ export class PlayerData {
     return ret;
   }
 
-  execute(func: string): void {
+  get asJson(): any {
+    const ret = {name: this.name, board: this.board, avatar: this.avatar, grid: []};
+    for (const row of this.gameGrid) {
+      ret.grid.push(Utils.cardsToJson(row));
+    }
+    return ret;
+  }
+
+  reset(): void {
+    this.setupDone = false;
+    this.gameGrid = [];
+    for (let y = 0; y < 3; y++) {
+      const row = [];
+      for (let x = 0; x < 4; x++) {
+        row.push(null);
+      }
+      this.gameGrid.push(row);
+    }
+  }
+
+  think(func: string): CardData {
+    let cmd = `think_${func}`;
+    let ret = null;
+    if (this.brain?.[cmd]) {
+      ret = this.brain[cmd]();
+      if (ret != null) {
+        console.log(this.name, cmd, ret.forLog);
+      }
+    }
+    return ret;
   }
 
   finishGame(): void {
     for (const row of this.gameGrid) {
       for (const card of row) {
         if (card != null) {
-          card.uncover();
+          card._covered = false; // uncover();
         }
       }
     }
@@ -109,15 +141,5 @@ export class PlayerData {
       }
     }
     return null;
-  }
-
-  toString(): string {
-    let ret = [];
-    for (const row of this.gameGrid) {
-      ret.push(Utils.cardsToJson(row));
-    }
-
-    ret.push(`${this.name}`);
-    return Utils.join(ret, '');
   }
 }
