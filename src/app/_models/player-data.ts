@@ -85,10 +85,11 @@ export class PlayerData {
   }
 
   get asJson(): any {
-    const ret = {name: this.name, board: this.board, avatar: this.avatar, grid: []};
-    for (const row of this.gameGrid) {
-      ret.grid.push(Utils.cardsToJson(row));
-    }
+    const ret = {name: this.name, board: this.board, avatar: this.avatar, opponent: this.opponentIdx, grid: undefined};
+    // ret.grid = [];
+    // for (const row of this.gameGrid) {
+    //   ret.grid.push(Utils.cardsToJson(row));
+    // }
     return ret;
   }
 

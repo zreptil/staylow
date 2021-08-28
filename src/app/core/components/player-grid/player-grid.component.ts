@@ -72,4 +72,13 @@ export class PlayerGridComponent implements OnInit {
     //   });
   }
 
+  clickGame(): void {
+    this.ss.initGame();
+    this.ss.saveConfig();
+    this.ss.appMode = 'game';
+  }
+
+  clickConfig(): void {
+    this.ss.appMode = 'config';
+  }
 }

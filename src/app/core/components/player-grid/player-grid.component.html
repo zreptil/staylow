@@ -14,8 +14,8 @@
         <div class="player">
           <div class="name">{{player.name}}</div>
           <img *ngIf="player.avatar!=''"
-               class="avatar"
-               [src]="player.avatarPath">
+               [src]="player.avatarPath"
+               class="avatar">
         </div>
         <div class="counter">
           Gesamtpunkte: {{player.score}}
@@ -27,3 +27,5 @@
     </div>
   </div>
 </div>
+<button *ngIf="ss.appMode==='config'" (click)="clickGame()" mat-raised-button>Spielen</button>
+<button *ngIf="ss.appMode!=='config'" (click)="clickConfig()" mat-raised-button>Konfiguration</button>

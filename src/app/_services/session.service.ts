@@ -34,16 +34,7 @@ export class SessionService {
     this._mode = 'setup1';
     this.currentPlayerIdx = 0;
     this.players = [];
-    let p;
-    if (this.env.production) {
-      this.players.push(this.createPlayer({name: `Mutti`, board: 2, avatar: 4}));
-      this.players.push(this.createPlayer({opponentIdx: 0}));
-    } else {
-//      this.players.push(new PlayerData({opponentIdx: 1}));
-      this.players.push(this.createPlayer({opponentIdx: 0}));
-      this.players.push(this.createPlayer({name: `Spieler 1`, board: 2, avatar: 2}));
-    }
-
+    this.loadConfig();
     this.initGame();
   }
 
@@ -168,6 +159,46 @@ export class SessionService {
     return Utils.join(ret, '');
   }
 
+  loadConfig(): void {
+    let cfg = JSON.parse(localStorage.getItem('config'));
+    if (cfg == null) {
+      cfg = {
+        players: [
+          {name: 'Spieler 1', board: 2, avatar: 4, opponent: -1},
+          {name: 'Spieler 2', board: 3, avatar: 5, opponent: -1}
+        ]
+      };
+    }
+    const players = [];
+    for (const p of cfg.players) {
+      p.opponentIdx = p.opponent;
+      players.push(this.createPlayer(p));
+    }
+
+    // this.players.push(this.createPlayer({name: `Spieler 1`, board: 2, avatar: 4}));
+    // this.players.push(this.createPlayer({name: `Spieler 2`, board: 3, avatar: 5}));
+
+    this.players = players;
+
+    console.log(this.players);
+//     if (this.env.production) {
+//       this.players.push(this.createPlayer({name: `Mutti`, board: 2, avatar: 4}));
+//       this.players.push(this.createPlayer({opponentIdx: 0}));
+//     } else {
+// //      this.players.push(new PlayerData({opponentIdx: 1}));
+//       this.players.push(this.createPlayer({opponentIdx: 0}));
+//       this.players.push(this.createPlayer({name: `Spieler 1`, board: 2, avatar: 2}));
+//     }
+  }
+
+  saveConfig(): void {
+    const cfg = {players: []};
+    for (const p of this.players) {
+      cfg.players.push(p.asJson);
+    }
+    localStorage.setItem('config', JSON.stringify(cfg));
+  }
+
   createPlayer({name = 'Spieler', opponentIdx = -1, board = 1, avatar = null}): PlayerData {
     let brain = null;
     if (opponentIdx >= 0) {
@@ -180,7 +211,9 @@ export class SessionService {
       board = opp.board;
       avatar = opp.avatar;
     }
-    const ret = new PlayerData({name, brain, opponentIdx, board, avatar});
+    const ret = new PlayerData({
+      name: name, brain: brain, opponentIdx: opponentIdx, board: board, avatar: avatar
+    });
     return ret;
   }
 
