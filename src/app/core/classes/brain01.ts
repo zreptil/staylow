@@ -4,6 +4,7 @@ import {PlayerData} from '@/_models/player-data';
 
 export class Brain01 {
   public player: PlayerData;
+  public level = 1;
 
   constructor(public ss: SessionService) {
   }

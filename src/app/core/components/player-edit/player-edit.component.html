@@ -1,0 +1,42 @@
+<h2 mat-dialog-title>Spielerdefinition</h2>
+<mat-dialog-content class="mat-typography">
+  <form>
+    <mat-slide-toggle
+      (toggleChange)="changeBrain()"
+      [checked]="player.opponentIdx>=0"
+      class="example-margin"
+      color="accent">
+      Computergegner
+    </mat-slide-toggle>
+    <ng-container *ngIf="player.opponentIdx<0">
+      <mat-form-field appearance="fill">
+        <mat-label i18n>Name</mat-label>
+        <input [(ngModel)]="player.name" i18n-placeholder matInput name="playername" placeholder="Spieler">
+      </mat-form-field>
+      <div class="btnPanel">
+        <button (click)="clickAvatar()" mat-raised-button>
+          <img [src]="player.avatarPath" class="avatar"
+               matSuffix alt="avatar{{player.avatar}}">
+        </button>
+        <button (click)="clickBoard()" mat-raised-button>
+          <img [src]="player.boardPath" class="board"
+               matSuffix alt="board{{player.board}}">
+        </button>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="player.opponentIdx>=0">
+      <button (click)="clickOpponent()" class="btnOpponent" mat-raised-button>
+        <img [src]="player.avatarPath" class="avatar" alt="avatar{{player.avatar}}">
+        <span>{{player.name}}</span>
+        <span class="levelPanel">
+          <span class="level" i18n>Level {{player.brain.level}}</span>
+        </span>
+      </button>
+    </ng-container>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button mat-dialog-close>Abbruch</button>
+  <button [mat-dialog-close]="player" mat-button>Speichern</button>
+</mat-dialog-actions>

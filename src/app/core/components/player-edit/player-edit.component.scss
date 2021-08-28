@@ -1,0 +1,57 @@
+form {
+  display: flex;
+  flex-flow: column;
+
+  .btnPanel {
+    display: flex;
+    flex-flow: row;
+
+    button {
+      padding: 1em;
+      background: rgba(0, 0, 0, 0.3);
+      width: 50%;
+
+      .avatar {
+        width: 3em;
+      }
+
+      .board {
+        width: 3em;
+      }
+    }
+  }
+
+  .btnOpponent {
+    display: flex;
+    justify-content: center;
+    margin-top: 1em;
+    padding: 1em;
+    background: rgba(0, 0, 0, 0.3);
+    width: 100%;
+
+    span {
+      display: block;
+    }
+
+    .avatar {
+      width: 3em;
+    }
+
+    .levelPanel {
+      display: flex;
+      justify-content: center;
+      .level {
+        background: rgba(255, 255, 255, 0.5);
+        line-height: 2em;
+        border-radius: 1em;
+        padding: 0 1em;
+      }
+    }
+  }
+}
+
+mat-dialog-actions {
+  display: flex;
+  flex-flow: row;
+  justify-content: flex-end;
+}

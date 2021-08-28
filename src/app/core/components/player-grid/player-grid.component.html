@@ -2,20 +2,20 @@
   <div *ngFor="let player of ss.players, let idx = index"
        [style]="playerStyle(idx)"
        class="player">
-    <div [style]="boardStyle(idx)" class="board">
-      <table [class]="classForTable(idx)">
+    <div [style]="boardStyle(player)" class="board">
+      <table *ngIf="ss.appMode==='game'" [class]="classForTable(idx)">
         <tr *ngFor="let row of player.gameGrid">
           <td *ngFor="let card of row">
             <app-gaming-card [card]="card"></app-gaming-card>
           </td>
         </tr>
       </table>
-      <div class="info">
+      <div (click)="clickInfo(player, idx)" [class]="['info', ss.appMode==='config' ? 'clickabale' : null]">
         <div class="player">
           <div class="name">{{player.name}}</div>
           <img *ngIf="player.avatar!=''"
                class="avatar"
-               src="assets/avatars/{{player.avatar}}.png">
+               [src]="player.avatarPath">
         </div>
         <div class="counter">
           Gesamtpunkte: {{player.score}}

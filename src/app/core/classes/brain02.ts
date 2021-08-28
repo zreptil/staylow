@@ -1,19 +1,13 @@
 import {SessionService} from '@/_services/session.service';
 import {CardData} from '@/_models/card-data';
 import {PlayerData} from '@/_models/player-data';
+import {Brain01} from '@/core/classes/brain01';
 
-export class Brain02 {
-  public player: PlayerData;
+export class Brain02 extends Brain01 {
+  public level = 2;
 
   constructor(public ss: SessionService) {
-  }
-
-  think_setup1(): CardData {
-    return this.selectCoveredCard();
-  }
-
-  think_setup2(): CardData {
-    return this.selectCoveredCard();
+    super(ss);
   }
 
   think_selectPile(): CardData {
@@ -36,30 +30,5 @@ export class Brain02 {
       card = this.ss.openPile[0];
     }
     return card;
-  }
-
-  think_uncoverCard(): CardData {
-    return this.selectCoveredCard();
-  }
-
-  findHighestCard(): CardData {
-    let found = null;
-    for (const row of this.player.gameGrid) {
-      for (const card of row) {
-        if (card != null && !card.coveredState && card.value > (found?.value || -3)) {
-          found = card;
-        }
-      }
-    }
-    return found;
-  }
-
-  selectCoveredCard(): CardData {
-    let x, y;
-    do {
-      y = Math.floor(Math.random() * this.player.gameGrid.length);
-      x = Math.floor(Math.random() * this.player.gameGrid[y].length);
-    } while (this.player.gameGrid[y][x] == null || !this.player.gameGrid[y][x].coveredState);
-    return this.player.gameGrid[y][x];
   }
 }

@@ -1,31 +1,29 @@
-<div class="stackPanel">
-  <div class="stacks">
-    <div class="pile">
-      <app-gaming-card [card]="hiddenStackCardPre"></app-gaming-card>
-      <app-gaming-card [card]="hiddenStackCard"></app-gaming-card>
+<ng-container *ngIf="ss.appMode==='game'">
+  <div class="stackPanel">
+    <div class="stacks">
+      <div class="pile">
+        <app-gaming-card [card]="hiddenStackCardPre"></app-gaming-card>
+        <app-gaming-card [card]="hiddenStackCard"></app-gaming-card>
+      </div>
+      <div class="pile">
+        <app-gaming-card [card]="openStackCardPre"></app-gaming-card>
+        <app-gaming-card [card]="openStackCard"></app-gaming-card>
+      </div>
     </div>
-    <div class="pile">
-      <app-gaming-card [card]="openStackCardPre"></app-gaming-card>
-      <app-gaming-card [card]="openStackCard"></app-gaming-card>
+    <div class="info">
+      <ng-container>
+        <div [innerHtml]="ss.gameInfo"></div>
+        <button (click)="ss.onWaitAfterClick()"
+                *ngIf="ss.mode.startsWith('waitafter_')"
+                color="primary" i18n
+                mat-raised-button>
+          Weiter
+        </button>
+      </ng-container>
     </div>
   </div>
-  <div class="info">
-    <ng-container>
-      <div [innerHtml]="ss.gameInfo"></div>
-      <button (click)="ss.onWaitAfterClick()" *ngIf="ss.mode.startsWith('waitafter_')" color="primary" i18n
-              mat-raised-button>
-        Weiter
-      </button>
-    </ng-container>
-  </div>
-</div>
+</ng-container>
 <app-player-grid></app-player-grid>
 <div *ngIf="!ss.env.production" class="dbg-info">
   {{ss.players[ss.currentPlayerIdx]?.name}} - {{ss.mode}}
 </div>
-<!--
-<app-player-grid [player]="ss.currentPlayerIdx"></app-player-grid>
-<div class="inactivePanel">
-  <app-player-grid *ngFor="let playerIdx of ss.inactivePlayers" [player]="playerIdx"></app-player-grid>
-</div>
--->

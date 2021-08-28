@@ -1,0 +1,13 @@
+<div class="grid">
+  <button *ngFor="let entry of list; let idx = index"
+          [mat-dialog-close]="idx"
+          mat-raised-button>
+    <img [src]="entry.path" [alt]="entry.name">
+    <span *ngIf="entry.name!=null">
+      <span>{{entry.name}}</span>
+      <span class="levelPanel">
+        <span class="level" i18n>Level {{entry.level}}</span>
+      </span>
+    </span>
+  </button>
+</div>

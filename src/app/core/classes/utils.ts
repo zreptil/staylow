@@ -119,6 +119,16 @@ export class Utils {
     return years;
   }
 
+  static formatNumber(value: number, places?: number) {
+    let ret = `${Math.floor(value)}`;
+    if (places) {
+      while (ret.length < places) {
+        ret = `0${ret}`;
+      }
+    }
+    return ret;
+  }
+
   // Die Nachkommastellen einer Dezimalzahl abschneiden (nicht runden)
   static cutNumber(value: number, decimalPlaces: number): number {
     const numPower = Math.pow(10, decimalPlaces);

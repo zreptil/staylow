@@ -21,8 +21,12 @@ body {
   padding: 0;
   font-family: Roboto, Verdana, Tahoma, Arial, sans-serif;
   background-color: $frame_back;
-  background-image: url("assets/boards/board0.png");
+  background-image: url("assets/boards/board01.png");
   overflow-x: hidden;
+
+  .clickabale {
+    cursor: pointer;
+  }
 
   app-root {
     width: 100%;
@@ -111,6 +115,7 @@ body {
           height: fit-content;
 
           .name {
+            min-height: 3em;
             font-size: 0.7em;
           }
         }
@@ -283,5 +288,8 @@ body {
         }
       }
     }
+  }
+  .mat-dialog-container {
+    background-image:url("assets/boards/board01.png");
   }
 }

@@ -1,0 +1,40 @@
+form {
+  mat-form-field {
+    width: 100%;
+  }
+}
+
+.grid {
+  display: flex;
+  flex-flow: row;
+  flex-wrap: wrap;
+  overflow-x: hidden;
+  overflow-y: auto;
+  max-height: 90vh;
+  justify-content: center;
+
+  button {
+    padding: 1em;
+    background: rgba(0, 0, 0, 0.3);
+
+    span {
+      display: block;
+    }
+
+    img {
+      width: 5em;
+      margin: 0.5em;
+    }
+
+    .levelPanel {
+      display: flex;
+      justify-content: center;
+      .level {
+        background: rgba(255, 255, 255, 0.5);
+        line-height: 2em;
+        border-radius: 1em;
+        padding: 0 1em;
+      }
+    }
+  }
+}

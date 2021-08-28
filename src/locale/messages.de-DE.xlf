@@ -27,109 +27,138 @@
         <source>Eine Karte aufdecken</source>
         <context-group purpose="location">
           <context context-type="sourcefile">../../dist/out-locl/app/_services/session.service.js</context>
-          <context context-type="linenumber">88</context>
+          <context context-type="linenumber">95</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3419672159698273939" datatype="html">
         <source>Noch eine Karte aufdecken</source>
         <context-group purpose="location">
           <context context-type="sourcefile">../../dist/out-locl/app/_services/session.service.js</context>
-          <context context-type="linenumber">89</context>
+          <context context-type="linenumber">96</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4324918067920854070" datatype="html">
         <source>@nextplayer@ ist dran</source>
         <context-group purpose="location">
           <context context-type="sourcefile">../../dist/out-locl/app/_services/session.service.js</context>
-          <context context-type="linenumber">90</context>
+          <context context-type="linenumber">97</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">../../dist/out-locl/app/_services/session.service.js</context>
-          <context context-type="linenumber">96</context>
+          <context context-type="linenumber">103</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2647759687837052061" datatype="html">
         <source>Eine Karte von einem der Stapel ziehen</source>
         <context-group purpose="location">
           <context context-type="sourcefile">../../dist/out-locl/app/_services/session.service.js</context>
-          <context context-type="linenumber">91</context>
+          <context context-type="linenumber">98</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2036011837818729591" datatype="html">
         <source>Eigene Karte ersetzen</source>
         <context-group purpose="location">
           <context context-type="sourcefile">../../dist/out-locl/app/_services/session.service.js</context>
-          <context context-type="linenumber">93</context>
+          <context context-type="linenumber">100</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7107436321564586188" datatype="html">
         <source>Eigene Karte ersetzen oder auf dem offenen Stapel ablegen</source>
         <context-group purpose="location">
           <context context-type="sourcefile">../../dist/out-locl/app/_services/session.service.js</context>
-          <context context-type="linenumber">94</context>
+          <context context-type="linenumber">101</context>
         </context-group>
       </trans-unit>
       <trans-unit id="846994516486581057" datatype="html">
         <source>Eine verdeckte Karte aufdecken</source>
         <context-group purpose="location">
           <context context-type="sourcefile">../../dist/out-locl/app/_services/session.service.js</context>
-          <context context-type="linenumber">95</context>
+          <context context-type="linenumber">102</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6462509669596345365" datatype="html">
         <source>Nächste Runde spielen</source>
         <context-group purpose="location">
           <context context-type="sourcefile">../../dist/out-locl/app/_services/session.service.js</context>
-          <context context-type="linenumber">97</context>
+          <context context-type="linenumber">104</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1596947576822571640" datatype="html">
         <source>Ende des Spiels</source>
         <context-group purpose="location">
           <context context-type="sourcefile">../../dist/out-locl/app/_services/session.service.js</context>
-          <context context-type="linenumber">98</context>
+          <context context-type="linenumber">105</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1225576467338080911" datatype="html">
         <source>Keine Ahnung, was läuft - <x id="PH" equiv-text="this.mode"/></source>
         <context-group purpose="location">
           <context context-type="sourcefile">../../dist/out-locl/app/_services/session.service.js</context>
-          <context context-type="linenumber">109</context>
+          <context context-type="linenumber">116</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2749862137920238605" datatype="html">
         <source> hat das Spiel beendet</source>
         <context-group purpose="location">
           <context context-type="sourcefile">../../dist/out-locl/app/_services/session.service.js</context>
-          <context context-type="linenumber">117</context>
+          <context context-type="linenumber">124</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2842454070385041932" datatype="html">
         <source>. Für die Frechheit, das zu tun und nicht die wenigsten Punkte zu haben, wurden diese verdoppelt.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">../../dist/out-locl/app/_services/session.service.js</context>
-          <context context-type="linenumber">119</context>
+          <context context-type="linenumber">126</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6729711853855029550" datatype="html">
         <source> und die Runde gewonnen.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">../../dist/out-locl/app/_services/session.service.js</context>
-          <context context-type="linenumber">122</context>
+          <context context-type="linenumber">129</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6199405027247540734" datatype="html">
         <source> Das Spiel ist vorüber, weil folgende Spieler über 100 Punkte haben: </source>
         <context-group purpose="location">
           <context context-type="sourcefile">../../dist/out-locl/app/_services/session.service.js</context>
-          <context context-type="linenumber">139</context>
+          <context context-type="linenumber">146</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2678158162232364941" datatype="html">
         <source> Weiter </source>
         <context-group purpose="location">
           <context context-type="sourcefile">../../dist/out-locl/app/core/components/frame/frame.component.js</context>
-          <context context-type="linenumber">64</context>
+          <context context-type="linenumber">100</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8800476882871783599" datatype="html">
+        <source>Level <x id="INTERPOLATION" equiv-text="&quot;\uFFFD0\uFFFD&quot;"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../../dist/out-locl/app/core/components/player-edit/image-selector/image-selector.component.js</context>
+          <context context-type="linenumber">66</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../../dist/out-locl/app/core/components/player-edit/player-edit.component.js</context>
+          <context context-type="linenumber">146</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1832264942542584412" datatype="html">
+        <source>Spieler</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../../dist/out-locl/app/core/components/player-edit/player-edit.component.js</context>
+          <context context-type="linenumber">116</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../../dist/out-locl/app/core/components/player-edit/player-edit.component.js</context>
+          <context context-type="linenumber">140</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8953033926734869941" datatype="html">
+        <source>Name</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../../dist/out-locl/app/core/components/player-edit/player-edit.component.js</context>
+          <context context-type="linenumber">134</context>
         </context-group>
       </trans-unit>
     </body>

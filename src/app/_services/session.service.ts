@@ -18,6 +18,15 @@ export class SessionService {
   public finalizerIdx = -1;
   public finalizerWasLowest = true;
   public gameIsOver = false;
+  public appMode = 'config';
+  public avatarList = {count: 10, mask: 'assets/avatars/av@idx@.png'};
+  public boardList = {count: 4, mask: 'assets/boards/board@idx@.png'};
+  public opponentDefs = [
+    {name: 'Susi Sorglos', avatar: 6, board: 4, brain: new Brain01(this)},
+    {name: 'Siegfried Sonnenschein', avatar: 10, board: 4, brain: new Brain01(this)},
+    {name: 'Gerda Greencard', avatar: 8, board: 4, brain: new Brain02(this)},
+    {name: 'Günter Grünspan', avatar: 9, board: 4, brain: new Brain02(this)}
+  ];
   private nextPlayerIdx = 0;
   private clickMode = '';
 
@@ -27,24 +36,24 @@ export class SessionService {
     this.players = [];
     let p;
     if (this.env.production) {
-      this.players.push(new PlayerData({name: `Mutti`, board: 1, avatar: 'av04'}));
-      this.players.push(new PlayerData({name: `Susi Sorglos`, board: 3, avatar: 'av06', brain: new Brain01(this)}));
+      this.players.push(this.createPlayer({name: `Mutti`, board: 2, avatar: 4}));
+      this.players.push(this.createPlayer({opponentIdx: 0}));
     } else {
-      this.players.push(new PlayerData({name: `Gerda Greencard`, board: 2, avatar: 'av08', brain: new Brain02(this)}));
-      this.players.push(new PlayerData({name: `Susi Sorglos`, board: 3, avatar: 'av06', brain: new Brain01(this)}));
-//      this.players.push(new PlayerData({name: `Spieler 1`, board: 1, avatar: 'av02'}));
-//      p = new PlayerData({name: `Spieler 2`, board: 2, avatar: 'av03'});
-      // p = new PlayerData('Susi Sorglos', new Brain01(this));
-      // p.board = 3;
-      // p.avatar = 'av06';
-      // this.players.push(p);
-      // p = new PlayerData('Siegfried Sonnenschein', new Brain01(this));
-      // p.board = 2;
-      // p.avatar = 'av05';
-      // this.players.push(p);
+//      this.players.push(new PlayerData({opponentIdx: 1}));
+      this.players.push(this.createPlayer({opponentIdx: 0}));
+      this.players.push(this.createPlayer({name: `Spieler 1`, board: 2, avatar: 2}));
     }
 
     this.initGame();
+  }
+
+  public _editPlayer: PlayerData;
+
+  get editPlayer(): PlayerData {
+    if (this._editPlayer == null) {
+      this._editPlayer = new PlayerData({name: `Spieler ${this.players.length + 1}`});
+    }
+    return this._editPlayer;
   }
 
   public _currentCard: CardData;
@@ -157,6 +166,22 @@ export class SessionService {
     }
 
     return Utils.join(ret, '');
+  }
+
+  createPlayer({name = 'Spieler', opponentIdx = -1, board = 1, avatar = null}): PlayerData {
+    let brain = null;
+    if (opponentIdx >= 0) {
+      if (opponentIdx >= this.opponentDefs.length) {
+        opponentIdx = this.opponentDefs.length - 1;
+      }
+      const opp = this.opponentDefs[opponentIdx];
+      brain = opp.brain;
+      name = opp.name;
+      board = opp.board;
+      avatar = opp.avatar;
+    }
+    const ret = new PlayerData({name, brain, opponentIdx, board, avatar});
+    return ret;
   }
 
   onWaitAfterClick(): void {

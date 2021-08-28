@@ -13,6 +13,10 @@ import {registerLocaleData} from '@angular/common';
 import {MaterialModule} from '@/material.module';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {LayoutModule} from '@angular/cdk/layout';
+import {PlayerEditComponent} from './core/components/player-edit/player-edit.component';
+import {ImageSelectorComponent} from './core/components/player-edit/image-selector/image-selector.component';
+import {MatBadgeModule} from '@angular/material/badge';
+import {MatChipsModule} from '@angular/material/chips';
 
 registerLocaleData(localeDe, 'de-DE');
 
@@ -21,7 +25,9 @@ registerLocaleData(localeDe, 'de-DE');
     AppComponent,
     FrameComponent,
     GamingCardComponent,
-    PlayerGridComponent
+    PlayerGridComponent,
+    PlayerEditComponent,
+    ImageSelectorComponent
   ],
   imports: [
     BrowserModule,
@@ -31,7 +37,9 @@ registerLocaleData(localeDe, 'de-DE');
     AppRoutingModule,
     FormsModule,
     ReactiveFormsModule,
-    MaterialModule
+    MaterialModule,
+    MatBadgeModule,
+    MatChipsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

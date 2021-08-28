@@ -9,9 +9,11 @@ export class PlayerData {
   public setupDone = false;
   public name: string;
   public brain: any;
+  public opponentIdx: number;
 
-  constructor({name = 'Spieler', brain = null, board = 1, avatar = null}) {
+  constructor({name = 'Spieler', brain = null, opponentIdx = -1, board = 1, avatar = null}) {
     this.name = name;
+    this.opponentIdx = opponentIdx;
     this.brain = brain;
     this.board = board;
     this.avatar = avatar;
@@ -20,6 +22,24 @@ export class PlayerData {
     if (brain != null) {
       brain.player = this;
     }
+  }
+
+  get clone(): PlayerData {
+    return new PlayerData({
+      name: this.name,
+      brain: this.brain,
+      opponentIdx: this.opponentIdx,
+      board: this.board,
+      avatar: this.avatar
+    });
+  }
+
+  get avatarPath(): string {
+    return `assets/avatars/av${Utils.formatNumber(this.avatar, 2)}.png`;
+  }
+
+  get boardPath(): string {
+    return `assets/boards/board${Utils.formatNumber(this.board, 2)}.png`;
   }
 
   get isDone(): boolean {

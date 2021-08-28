@@ -1,7 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {SessionService} from '@/_services/session.service';
-import {animate, animateChild, group, query, state, style, transition, trigger} from '@angular/animations';
 import {BreakpointObserver} from '@angular/cdk/layout';
+import {PlayerData} from '@/_models/player-data';
+import {MatDialog} from '@angular/material/dialog';
+import {Utils} from '@/core/classes/utils';
+import {PlayerEditComponent} from '@/core/components/player-edit/player-edit.component';
 
 @Component({
   selector: 'app-player-grid',
@@ -11,11 +14,12 @@ import {BreakpointObserver} from '@angular/cdk/layout';
 export class PlayerGridComponent implements OnInit {
 
   constructor(public bpo: BreakpointObserver,
-              public ss: SessionService) {
+              public ss: SessionService,
+              public dialog: MatDialog) {
   }
 
-  boardStyle(idx: number): string {
-    return `background-image:url("assets/boards/board${this.ss.players[idx].board}.png")`;
+  boardStyle(player: PlayerData): string {
+    return `background-image:url("assets/boards/board${Utils.formatNumber(player.board, 2)}.png")`;
   }
 
   playerStyle(idx: number): string {
@@ -36,6 +40,20 @@ export class PlayerGridComponent implements OnInit {
       ret.push('inactive');
     }
     return ret;
+  }
+
+  clickInfo(player: PlayerData, idx: number): void {
+    if (this.ss.appMode !== 'config') {
+      return;
+    }
+    this.ss._editPlayer = player;
+    const dialogRef = this.dialog.open(PlayerEditComponent);
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.ss.players[idx] = result;
+      }
+    });
+    console.log(player);
   }
 
   ngOnInit(): void {
