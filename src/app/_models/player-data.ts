@@ -93,6 +93,13 @@ export class PlayerData {
     return ret;
   }
 
+  get forLog(): string {
+    const ret = [];
+    ret.push(this.name);
+    ret.push(this.isDone ? '+' : '-');
+    return Utils.join(ret, ', ');
+  }
+
   reset(): void {
     this.setupDone = false;
     this.gameGrid = [];

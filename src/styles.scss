@@ -13,6 +13,11 @@
   background-color: rgba(0, 0, 0, 0.3);
 }
 
+button.mat-focus-indicator.mat-raised-button.mat-button-base {
+  background: rgba(0, 0, 0, 0.2) !important;
+  color: black;
+}
+
 body {
   display: flex;
   flex-flow: column;
@@ -23,6 +28,7 @@ body {
   background-color: $frame_back;
   background-image: url("assets/boards/board01.png");
   overflow-x: hidden;
+  font-size: 12pt;
 
   .clickabale {
     cursor: pointer;
@@ -120,6 +126,10 @@ body {
           }
         }
 
+        .player.add .board {
+          background-color: transparent;
+        }
+
         .board {
           background-color: $grid_back;
           padding: 0.5em;
@@ -157,6 +167,16 @@ body {
           color: rgba(255, 255, 255, 0.6);
         }
       }
+
+      .pnlControls {
+        margin: 0.5em 0;
+      }
+    }
+
+    app-player-grid.config {
+      align-items: center;
+      height: 100vh;
+      justify-content: center;
     }
   }
 
@@ -254,7 +274,7 @@ body {
     }
   }
 
-  @media(max-width: 65em) {
+  @media(max-width: 1024px) {
     app-frame {
       flex-flow: column;
       overflow-y: auto;
@@ -280,16 +300,26 @@ body {
       }
     }
   }
-  @media(max-width: 40em) {
+  @media(max-width: 600px) {
     app-frame {
       app-player-grid {
         .playerPanel {
-          font-size: 1.3em;
+          font-size: 1em;
         }
       }
     }
   }
+  @media(max-width: 400px) {
+    app-frame {
+      app-player-grid {
+        .playerPanel {
+          font-size: 0.7em;
+        }
+      }
+    }
+  }
+
   .mat-dialog-container {
-    background-image:url("assets/boards/board01.png");
+    background-image: url("assets/boards/board01.png");
   }
 }

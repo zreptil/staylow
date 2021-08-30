@@ -23,7 +23,7 @@
     </div>
   </div>
 </ng-container>
-<app-player-grid></app-player-grid>
+<app-player-grid [class]="[ss.appMode]"></app-player-grid>
 <div *ngIf="!ss.env.production" class="dbg-info">
   {{ss.players[ss.currentPlayerIdx]?.name}} - {{ss.mode}}
 </div>

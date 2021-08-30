@@ -20,10 +20,10 @@ export class SessionService {
   public gameIsOver = false;
   public appMode = 'config';
   public avatarList = {count: 10, mask: 'assets/avatars/av@idx@.png'};
-  public boardList = {count: 4, mask: 'assets/boards/board@idx@.png'};
+  public boardList = {count: 10, mask: 'assets/boards/board@idx@.png'};
   public opponentDefs = [
-    {name: 'Susi Sorglos', avatar: 6, board: 4, brain: new Brain01(this)},
-    {name: 'Siegfried Sonnenschein', avatar: 10, board: 4, brain: new Brain01(this)},
+    {name: 'Susi Sorglos', avatar: 6, board: 3, brain: new Brain01(this)},
+    {name: 'Siegfried Sonnenschein', avatar: 10, board: 3, brain: new Brain01(this)},
     {name: 'Gerda Greencard', avatar: 8, board: 4, brain: new Brain02(this)},
     {name: 'Günter Grünspan', avatar: 9, board: 4, brain: new Brain02(this)}
   ];
@@ -67,18 +67,24 @@ export class SessionService {
   public set mode(value: string) {
     this._mode = value;
     this.clickMode = value;
-    console.error('mode =', this._mode);
+    console.error('mode =', this._mode, this.statusInfo);
     const player = this.players?.[this.currentPlayerIdx];
-    if (player != null && !player.isDone) {
-      const card = player.think(this._mode);
-      if (card != null) {
-        this.onCardClick(card);
-      }
+    if (player != null) {
       const cmd = `on_${this.mode}`;
-      if (this[cmd]) {
-        this[cmd]();
-      } else if (this.mode === 'waitafter_round' || this.mode === 'waitafter_setup2') {
-        setTimeout(() => this.onWaitAfterClick(), 10);
+      if (!player.isDone) {
+        const card = player.think(this._mode);
+        if (card != null) {
+          this.onCardClick(card);
+        }
+        if (this[cmd]) {
+          this[cmd]();
+        } else if (this.mode === 'waitafter_round' || this.mode === 'waitafter_setup2') {
+          setTimeout(() => this.onWaitAfterClick(), 10);
+        }
+      } else {
+        if (this[cmd]) {
+          this[cmd]();
+        }
       }
     }
   }
@@ -157,6 +163,14 @@ export class SessionService {
     }
 
     return Utils.join(ret, '');
+  }
+
+  private get statusInfo(): any {
+    return {
+      cp: this.players[this.currentPlayerIdx]?.forLog,
+      np: this.players[this.nextPlayerIdx]?.forLog,
+      cc: this.currentCard?.forLog
+    };
   }
 
   loadConfig(): void {

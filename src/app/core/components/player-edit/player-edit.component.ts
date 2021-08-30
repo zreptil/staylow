@@ -1,9 +1,10 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {SessionService} from '@/_services/session.service';
 import {MatDialog} from '@angular/material/dialog';
 import {ImageSelectorComponent} from '@/core/components/player-edit/image-selector/image-selector.component';
 import {PlayerData} from '@/_models/player-data';
 import {Utils} from '@/core/classes/utils';
+import {OpponentSelectorComponent} from '@/core/components/player-edit/opponent-selector/opponent-selector.component';
 
 @Component({
   selector: 'app-player-edit',
@@ -45,9 +46,9 @@ export class PlayerEditComponent {
         level: opponent.brain.level
       });
     }
-    const dialogRef = this.dialog.open(ImageSelectorComponent, {data: {list}});
+    const dialogRef = this.dialog.open(OpponentSelectorComponent);
     dialogRef.afterClosed().subscribe(result => {
-      if (result) {
+      if (result != null) {
         this.player = this.ss.createPlayer({opponentIdx: +result});
       }
     });

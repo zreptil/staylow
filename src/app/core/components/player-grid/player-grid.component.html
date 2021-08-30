@@ -17,15 +17,29 @@
                [src]="player.avatarPath"
                class="avatar">
         </div>
-        <div class="counter">
-          Gesamtpunkte: {{player.score}}
-        </div>
-        <div class="counter">
-          Sichtbar: {{player.visibleValue}}
+        <ng-container *ngIf="ss.appMode!=='config'">
+          <div class="counter">
+            Gesamtpunkte: {{player.score}}
+          </div>
+          <div class="counter">
+            Sichtbar: {{player.visibleValue}}
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="ss.appMode==='config' && ss.players.length<8" style="order:1000" class="player add">
+    <div class="board">
+      <div (click)="clickInfo(null, ss.players.length)" [class]="['info', 'clickabale']">
+        <div class="player">
+          <div class="name">Spieler hinzufügen</div>
+          <mat-icon>add</mat-icon>
         </div>
       </div>
     </div>
   </div>
 </div>
-<button *ngIf="ss.appMode==='config'" (click)="clickGame()" mat-raised-button>Spielen</button>
-<button *ngIf="ss.appMode!=='config'" (click)="clickConfig()" mat-raised-button>Konfiguration</button>
+<div class="pnlControls">
+  <button (click)="clickGame()" *ngIf="ss.appMode==='config'" mat-raised-button>Spielen</button>
+  <button (click)="clickConfig()" *ngIf="ss.appMode!=='config'" mat-raised-button>Konfiguration</button>
+</div>

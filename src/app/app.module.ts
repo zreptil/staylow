@@ -17,6 +17,8 @@ import {PlayerEditComponent} from './core/components/player-edit/player-edit.com
 import {ImageSelectorComponent} from './core/components/player-edit/image-selector/image-selector.component';
 import {MatBadgeModule} from '@angular/material/badge';
 import {MatChipsModule} from '@angular/material/chips';
+import { OpponentTileComponent } from './core/components/player-edit/opponent-tile/opponent-tile.component';
+import { OpponentSelectorComponent } from './core/components/player-edit/opponent-selector/opponent-selector.component';
 
 registerLocaleData(localeDe, 'de-DE');
 
@@ -27,7 +29,9 @@ registerLocaleData(localeDe, 'de-DE');
     GamingCardComponent,
     PlayerGridComponent,
     PlayerEditComponent,
-    ImageSelectorComponent
+    ImageSelectorComponent,
+    OpponentTileComponent,
+    OpponentSelectorComponent
   ],
   imports: [
     BrowserModule,

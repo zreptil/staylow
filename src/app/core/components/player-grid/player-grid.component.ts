@@ -46,14 +46,21 @@ export class PlayerGridComponent implements OnInit {
     if (this.ss.appMode !== 'config') {
       return;
     }
+    if (player == null) {
+      player = this.ss.createPlayer({opponentIdx: 2});
+      this.ss.players.push(player);
+    }
     this.ss._editPlayer = player;
     const dialogRef = this.dialog.open(PlayerEditComponent);
     dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.ss.players[idx] = result;
+      if (result != null) {
+        if (result === 'remove') {
+          this.ss.players.splice(idx, 1);
+        } else {
+          this.ss.players[idx] = result;
+        }
       }
     });
-    console.log(player);
   }
 
   ngOnInit(): void {

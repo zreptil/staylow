@@ -1,0 +1,38 @@
+.opponent {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1em;
+  background: rgba(0, 0, 0, 0.3);
+  width: 100%;
+  cursor: pointer;
+
+  .info {
+    display: flex;
+    flex: 1;
+    margin: 0.5em;
+    padding: 0.5em;
+    flex-flow: column;
+    background: rgba(0, 0, 0, 0.3);
+    align-items: center;
+    justify-content: center;
+    color: white;
+  }
+
+  .avatar {
+    width: 3em;
+  }
+
+  .levelPanel {
+    display: flex;
+    justify-content: center;
+
+    .level {
+      color: black;
+      background: rgba(255, 255, 255, 0.5);
+      line-height: 2em;
+      border-radius: 1em;
+      padding: 0 1em;
+    }
+  }
+}

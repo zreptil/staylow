@@ -15,28 +15,26 @@
       </mat-form-field>
       <div class="btnPanel">
         <button (click)="clickAvatar()" mat-raised-button>
-          <img [src]="player.avatarPath" class="avatar"
-               matSuffix alt="avatar{{player.avatar}}">
+          <img [src]="player.avatarPath" alt="avatar{{player.avatar}}"
+               class="avatar" matSuffix>
         </button>
         <button (click)="clickBoard()" mat-raised-button>
-          <img [src]="player.boardPath" class="board"
-               matSuffix alt="board{{player.board}}">
+          <img [src]="player.boardPath" alt="board{{player.board}}"
+               class="board" matSuffix>
         </button>
       </div>
     </ng-container>
 
     <ng-container *ngIf="player.opponentIdx>=0">
-      <button (click)="clickOpponent()" class="btnOpponent" mat-raised-button>
-        <img [src]="player.avatarPath" class="avatar" alt="avatar{{player.avatar}}">
-        <span>{{player.name}}</span>
-        <span class="levelPanel">
-          <span class="level" i18n>Level {{player.brain.level}}</span>
-        </span>
-      </button>
+      <app-opponent-tile (click)="clickOpponent()" [player]="player"></app-opponent-tile>
     </ng-container>
   </form>
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button mat-button mat-dialog-close>Abbruch</button>
-  <button [mat-dialog-close]="player" mat-button>Speichern</button>
+  <button *ngIf="ss.players.length > 1" [mat-dialog-close]="'remove'" mat-icon-button>
+    <mat-icon>delete</mat-icon>
+  </button>
+  <button [mat-dialog-close]="player" mat-button>
+    <mat-icon>save</mat-icon>
+  </button>
 </mat-dialog-actions>

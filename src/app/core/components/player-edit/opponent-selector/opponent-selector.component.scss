@@ -1,0 +1,9 @@
+.grid {
+  display: flex;
+  flex-flow: row;
+  flex-wrap: wrap;
+  overflow-x: hidden;
+  overflow-y: auto;
+  max-height: 90vh;
+  justify-content: center;
+}
