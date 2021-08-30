@@ -96,6 +96,7 @@ body {
         width: calc(#{$active_left} - 1em);
         border-radius: 1em;
         margin-bottom: 1em;
+        min-height: 5em;
 
         button {
           margin: 1em;

@@ -1,31 +1,36 @@
-<div (click)="onCardClick()" *ngIf="card?.cardId == null" class="empty">
+<div (click)="onCardClick()" *ngIf="card?.cardId == null || !card?.visible" class="empty">
   &nbsp;
 </div>
-<div (@uncover.done)="onUncoverDone($event)"
-     (@uncover.start)="onUncoverStart($event)"
-     (click)="onCardClick()"
-     *ngIf="card?.cardId != null"
-     [@uncover]="card.animationState"
-     [@.disabled]="card.noAnimation"
-     [class]="ss.getClassForCard(card)">
-  <div *ngIf="!card.coveredState" class="value">
-    <div>{{card.value}}</div>
-    <div *ngIf="!ss.env.production" class="debug">
-      {{card.cardId}}-{{card.scope.type}}
-      <ng-container *ngIf="card.scope.type==='openpile'">
-        {{ss.openPile.length}}
-      </ng-container>
-    </div>
-  </div>
-  <div *ngIf="card.coveredState" class="cover">
-    <div class="text">
-      {{ss.env.appName}}
+<ng-container *ngIf="card?.visibleState">
+  <div (@hide.done)="onAnimationDone($event, this.card?.hideState)"
+       (@show.done)="onAnimationDone($event, this.card?.showState)"
+       (@uncover.done)="onAnimationDone($event, this.card?.coverState)"
+       (click)="onCardClick()"
+       *ngIf="card?.cardId != null"
+       [@.disabled]="card.noAnimation"
+       [@hide]="card.hideState"
+       [@show]="card.showState"
+       [@uncover]="card.coverState"
+       [class]="ss.getClassForCard(card)">
+    <div *ngIf="!card.coveredState" class="value">
+      <div>{{card.value}}</div>
       <div *ngIf="!ss.env.production" class="debug">
         {{card.cardId}}-{{card.scope.type}}
-        <ng-container *ngIf="card.scope.type==='drawpile'">
-          {{ss.drawPile.length}}
+        <ng-container *ngIf="card.scope.type==='openpile'">
+          {{ss.openPile.length}}
         </ng-container>
       </div>
     </div>
+    <div *ngIf="card.coveredState" class="cover">
+      <div class="text">
+        {{ss.env.appName}}
+        <div *ngIf="!ss.env.production" class="debug">
+          {{card.cardId}}-{{card.scope.type}}
+          <ng-container *ngIf="card.scope.type==='drawpile'">
+            {{ss.drawPile.length}}
+          </ng-container>
+        </div>
+      </div>
+    </div>
   </div>
-</div>
+</ng-container>

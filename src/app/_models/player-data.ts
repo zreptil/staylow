@@ -156,18 +156,21 @@ export class PlayerData {
     return ret;
   }
 
-  replaceCard(oldCard: CardData, newCard: CardData): CardData {
-    for (const row of this.gameGrid) {
+  replaceCard(oldCard: CardData, newCard: CardData): {card: CardData, x: number, y: number} {
+    let ret = {card: null, x: -1, y:-1};
+    this.gameGrid.forEach((row, y) => {
       let idx = 0;
-      for (const card of row) {
+      row.forEach((card, x) => {
         if (card?.cardId === oldCard.cardId) {
-          newCard.scope.type = 'player';
+          if (newCard != null) {
+            newCard.scope.type = 'player';
+          }
           row[idx] = newCard;
-          return card;
+          ret = {card, x, y};
         }
         idx++;
-      }
-    }
-    return null;
+      });
+    });
+    return ret;
   }
 }

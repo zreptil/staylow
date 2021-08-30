@@ -11,7 +11,7 @@
       </div>
     </div>
     <div class="info">
-      <ng-container>
+      <ng-container *ngIf="ss.infos[ss.mode] != null">
         <div [innerHtml]="ss.gameInfo"></div>
         <button (click)="ss.onWaitAfterClick()"
                 *ngIf="ss.mode.startsWith('waitafter_')"

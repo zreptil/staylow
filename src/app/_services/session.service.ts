@@ -27,6 +27,8 @@ export class SessionService {
     {name: 'Gerda Greencard', avatar: 8, board: 4, brain: new Brain02(this)},
     {name: 'Günter Grünspan', avatar: 9, board: 4, brain: new Brain02(this)}
   ];
+  private;
+  public modeData = null;
   private nextPlayerIdx = 0;
   private clickMode = '';
 
@@ -102,22 +104,23 @@ export class SessionService {
     return ret;
   }
 
+  public infos = {
+    setup1: $localize`Eine Karte aufdecken`,
+    setup2: $localize`Noch eine Karte aufdecken`,
+    waitafter_setup2: $localize`@nextplayer@ ist dran`,
+    selectPile: $localize`Eine Karte von einem der Stapel ziehen`,
+    placeCard: this.currentCard?.scope.type === 'openpile'
+      ? $localize`Eigene Karte ersetzen`
+      : $localize`Eigene Karte ersetzen oder auf dem offenen Stapel ablegen`,
+    uncoverCard: $localize`Eine verdeckte Karte aufdecken`,
+    waitafter_round: $localize`@nextplayer@ ist dran`,
+    waitafter_endOfGame: $localize`Nächste Runde spielen`,
+    endOfGame: $localize`Ende des Spiels`,
+  };
+
   get gameInfo(): string {
-    const infos = {
-      setup1: $localize`Eine Karte aufdecken`,
-      setup2: $localize`Noch eine Karte aufdecken`,
-      waitafter_setup2: $localize`@nextplayer@ ist dran`,
-      selectPile: $localize`Eine Karte von einem der Stapel ziehen`,
-      placeCard: this.currentCard?.scope.type === 'openpile'
-        ? $localize`Eigene Karte ersetzen`
-        : $localize`Eigene Karte ersetzen oder auf dem offenen Stapel ablegen`,
-      uncoverCard: $localize`Eine verdeckte Karte aufdecken`,
-      waitafter_round: $localize`@nextplayer@ ist dran`,
-      waitafter_endOfGame: $localize`Nächste Runde spielen`,
-      endOfGame: $localize`Ende des Spiels`,
-    };
-    if (infos[this.mode] != null) {
-      let ret = infos[this.mode];
+    if (this.infos[this.mode] != null) {
+      let ret = this.infos[this.mode];
       if (this.mode === 'waitafter_endOfGame') {
         ret = this.endOfGameMessage;
       }
@@ -125,7 +128,7 @@ export class SessionService {
       ret = ret.replace(/@nextplayer@/g, this.players[this.nextPlayerIdx]?.name);
       return ret;
     }
-    return $localize`Keine Ahnung, was läuft - ${this.mode}`;
+    return this.env.production ? '' : $localize`${this.mode}`;
   }
 
   get endOfGameMessage(): string {
@@ -263,9 +266,30 @@ export class SessionService {
     }
   }
 
-  uncoverCard(card: CardData, mode: string): void {
+  hideCard(card: CardData, mode: string, data?: any): void {
+    if (card.visible) {
+      card.dataAfterAnimation = data;
+      card.modeAfterAnimation = mode;
+      card.hide();
+    } else {
+      setTimeout(() => this.mode = mode, 10);
+    }
+  }
+
+  showCard(card: CardData, mode: string, data?: any): void {
+    if (!card.visible) {
+      card.dataAfterAnimation = data;
+      card.modeAfterAnimation = mode;
+      card.show();
+    } else {
+      setTimeout(() => this.mode = mode, 10);
+    }
+  }
+
+  uncoverCard(card: CardData, mode: string, data?: any): void {
     log.info('uncoverCard', card.forLog, mode);
     if (card._covered) {
+      card.dataAfterAnimation = data;
       card.modeAfterAnimation = mode;
       card.uncover();
     } else {
@@ -403,26 +427,110 @@ export class SessionService {
     return false;
   }
 
+  on_draw2playerStep1(): void {
+    const data = this.players[this.currentPlayerIdx].replaceCard(this.modeData, null);
+    if (data != null) {
+      data.card.visible = false;
+      data.card.scope.type = 'openpile';
+      this.openPile.splice(0, 0, data.card);
+      data.card._covered = false;
+      this.showCard(data.card, 'draw2playerStep2', data);
+    }
+  }
+
+  on_draw2playerStep2(): void {
+    this.hideCard(this.currentCard, 'draw2playerStep3', this.modeData);
+  }
+
+  on_draw2playerStep3(): void {
+    this.currentCard.scope.type = 'player';
+    this.currentCard.scope.param = this.currentPlayerIdx;
+    this.currentCard.visible = false;
+    this.players[this.currentPlayerIdx].gameGrid[this.modeData.y][this.modeData.x] = this.currentCard;
+    this.getFromDrawPile();
+    this.showCard(this.currentCard, 'waitafter_round');
+  }
+
+  on_open2playerStep1(): void {
+    this.hideCard(this.openPile[0], 'open2playerStep2', this.modeData);
+  }
+
+  on_open2playerStep2(): void {
+    const card = this.getFromPile(this.openPile);
+    const data = this.players[this.currentPlayerIdx].replaceCard(this.modeData, card);
+    data.card.scope.type = 'openpile';
+    this.openPile.splice(0, 0, data.card);
+    data.card._covered = false;
+    this.showCard(data.card, 'open2playerStep3', card);
+  }
+
+  // on_open2playerStep3(): void {
+  //   if (this.modeData.pile._covered) {
+  //     this.uncoverCard(this.modeData.pile, 'open2playerStep4', this.modeData.player);
+  //   } else {
+  //     this.modeData = this.modeData.player;
+  //     setTimeout(() => this.mode = 'open2playerStep4', 10);
+  //   }
+  // }
+
+  on_open2playerStep3(): void {
+    this.showCard(this.modeData, 'waitafter_round');
+  }
+
+  on_draw2openStep1(): void {
+    const card = this.getFromDrawPile();
+    card.scope.type = 'openpile';
+    this.openPile.splice(0, 0, card);
+    this.showCard(card, 'uncoverCard');
+  }
+
   click_placeCard(card: CardData): boolean {
     if (card.scope.type === 'player' && card.scope.param === this.currentPlayerIdx) {
       // angeklickte Karte gehört dem Spieler
       const pile = this.currentCard.scope.type;
       this.currentCard.scope.param = this.currentPlayerIdx;
-      card = this.players[this.currentPlayerIdx].replaceCard(card, this.currentCard);
-      if (card != null) {
+      if (pile === 'drawpile') {
+        this.hideCard(card, 'draw2playerStep1', card);
+      } else {
+        this.hideCard(card, 'open2playerStep1', card);
+      }
+      return true;
+    } else if (card.cardId === this.currentCard?.cardId && card.scope.type === 'openpile') {
+      // angeklickte Karte ist die selektierte Karte und auf dem offenen Stapel => Auswahl rückgängig machen
+      this.currentCard = null;
+      setTimeout(() => this.mode = 'selectPile', 10);
+    } else if (card.scope.type === 'openpile') {
+      // Der offene Stapel wurde angeklickt
+      this.hideCard(this.currentCard, 'draw2openStep1');
+      return true;
+      // this.currentCard = this.getFromDrawPile();
+      // this.currentCard.scope.type = 'openpile';
+      // this.openPile.splice(0, 0, this.currentCard);
+      // setTimeout(() => this.mode = 'uncoverCard', 10);
+    }
+    return false;
+  }
+
+  click_placeCard_org(card: CardData): boolean {
+    if (card.scope.type === 'player' && card.scope.param === this.currentPlayerIdx) {
+      // angeklickte Karte gehört dem Spieler
+      const pile = this.currentCard.scope.type;
+      this.currentCard.scope.param = this.currentPlayerIdx;
+      const data = this.players[this.currentPlayerIdx].replaceCard(card, this.currentCard);
+      if (data != null) {
         if (pile === 'drawpile') {
           this.getFromDrawPile();
         } else {
           this.getFromPile(this.openPile);
         }
-        card.scope.type = 'openpile';
-        this.openPile.splice(0, 0, card);
-        this.uncoverCard(card, 'waitafter_round');
+        data.card.scope.type = 'openpile';
+        this.openPile.splice(0, 0, data.card);
+        this.uncoverCard(data.card, 'waitafter_round');
         return true;
       }
       return false;
     } else if (card.cardId === this.currentCard?.cardId && card.scope.type === 'openpile') {
-      // angeklickte Karte ist die selektierte Karte
+      // angeklickte Karte ist die selektierte Karte und auf dem offenen Stapel
       this.currentCard = null;
       setTimeout(() => this.mode = 'selectPile', 10);
     } else if (card.scope.type === 'openpile') {

@@ -1,6 +1,16 @@
 export class CardData {
-  public animationState = '';
+  public coverState = '';
+  public showState = '';
+  public hideState = '';
+  public visible = true;
+
+  constructor(private _id: number,
+              public _covered: boolean,
+              public scope: { type: 'player' | 'drawpile' | 'openpile', param?: any }) {
+  }
+
   public _modeAfterAnimation = '';
+  public dataAfterAnimation = null;
 
   public get modeAfterAnimation(): string {
     return this._modeAfterAnimation;
@@ -11,22 +21,23 @@ export class CardData {
     this._modeAfterAnimation = value;
   }
 
-  constructor(private _id: number,
-              public _covered: boolean,
-              public scope: { type: 'player' | 'drawpile' | 'openpile', param?: any }) {
-  }
-
   get noAnimation(): boolean {
-    if (this.animationState.startsWith('beg')
-      || this.animationState.startsWith('mid')
-      || this.animationState.startsWith('end')) {
+    if (this.coverState.startsWith('beg')
+      || this.coverState.startsWith('mid')
+      || this.coverState.startsWith('end')
+      || this.hideState.startsWith('beg')
+      || this.hideState.startsWith('mid')
+      || this.hideState.startsWith('end')
+      || this.showState.startsWith('beg')
+      || this.showState.startsWith('mid')
+      || this.showState.startsWith('end')) {
       return false;
     }
     return true;
   }
 
   get coveredState(): boolean {
-    switch (this.animationState) {
+    switch (this.coverState) {
       case 'begUncover':
       case 'midUncover':
       case 'endCover':
@@ -37,6 +48,20 @@ export class CardData {
         return false;
     }
     return this._covered;
+  }
+
+  get visibleState(): boolean {
+    switch (this.showState) {
+      case 'begHide':
+      case 'midHide':
+      case 'begShow':
+      case 'midShow':
+      case 'endShow':
+        return true;
+      case 'endHide':
+        return false;
+    }
+    return this.visible;
   }
 
   get isCovered(): boolean {
@@ -69,18 +94,6 @@ export class CardData {
     return idx[this.value + 2];
   }
 
-  uncover(): void {
-    if (this._covered) {
-      this.animationState = 'begUncover';
-    }
-  }
-
-  cover(): void {
-    if (!this._covered) {
-      this.animationState = 'begCover';
-    }
-  }
-
   get forLog(): string {
     return `${this._id}${this._covered ? '-' : '+'}${this.scope.type}${this.scope.param}`;
   }
@@ -91,5 +104,30 @@ export class CardData {
       ret = `0${ret}`;
     }
     return ret;
+  }
+
+  uncover(): void {
+    if (this._covered) {
+      this.coverState = 'begUncover';
+    }
+  }
+
+  cover(): void {
+    if (!this._covered) {
+      this.coverState = 'begCover';
+    }
+  }
+
+  hide(): void {
+    if (this.visible) {
+      this.hideState = 'begHide';
+    }
+  }
+
+  show(): void {
+    if (!this.visible) {
+      this.showState = 'begShow';
+      this.visible = true;
+    }
   }
 }
