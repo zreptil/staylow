@@ -404,14 +404,11 @@ export class SessionService {
   }
 
   click_placeCard(card: CardData): boolean {
-    log.info('placeCard', card.forLog);
     if (card.scope.type === 'player' && card.scope.param === this.currentPlayerIdx) {
-      log.info('war vom spieler');
       // angeklickte Karte gehört dem Spieler
       const pile = this.currentCard.scope.type;
       this.currentCard.scope.param = this.currentPlayerIdx;
       card = this.players[this.currentPlayerIdx].replaceCard(card, this.currentCard);
-      console.log('ersetzte karte', card.forLog);
       if (card != null) {
         if (pile === 'drawpile') {
           this.getFromDrawPile();
@@ -426,16 +423,13 @@ export class SessionService {
       return false;
     } else if (card.cardId === this.currentCard?.cardId && card.scope.type === 'openpile') {
       // angeklickte Karte ist die selektierte Karte
-      log.info('war gleiche karte');
       this.currentCard = null;
       setTimeout(() => this.mode = 'selectPile', 10);
     } else if (card.scope.type === 'openpile') {
       // Der offene Stapel wurde angeklickt
-      log.info('war auf openpile');
       this.currentCard = this.getFromDrawPile();
       this.currentCard.scope.type = 'openpile';
       this.openPile.splice(0, 0, this.currentCard);
-// this.currentCard = null;
       setTimeout(() => this.mode = 'uncoverCard', 10);
     }
     return false;
