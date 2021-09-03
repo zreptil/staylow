@@ -1,3 +1,4 @@
+/*
 import {Injectable} from '@angular/core';
 import {CardData} from '@/_models/card-data';
 import {EnvironmentService} from '@/_services/environment.service';
@@ -21,10 +22,10 @@ export class SessionService {
   gameIsOver = false;
   gameEnders = [];
   public appMode = 'config';
-  public version = '0.5.2';
+  public version = '0.5.0';
   public cfg = {
     lastVersion: '',
-    waitAfterPlayer: false,
+    waitAfterMove: false,
     waitAfterRound: true,
     waitAfterGame: true,
     currentPlayerLeft: true,
@@ -52,9 +53,9 @@ export class SessionService {
       ? $localize`Eigene Karte ersetzen`
       : $localize`Eigene Karte ersetzen oder auf dem offenen Stapel ablegen`,
     uncoverCard: $localize`Eine verdeckte Karte aufdecken`,
-    waitafter_setup2: $localize`@nextplayer@ ist dran`,
-    waitafter_player: $localize`@nextplayer@ ist dran`,
-    waitafter_round: $localize`Nächste Runde spielen`,
+    waitafter_move: $localize`@nextplayer@ ist dran`,
+    waitafter_round: $localize`@nextplayer@ ist dran`,
+    waitafter_endOfGame: $localize`Neues Spiel`,
     endOfGame: $localize`Ende des Spiels`,
   };
   private nextPlayerIdx = 0;
@@ -96,7 +97,7 @@ export class SessionService {
   public set mode(value: string) {
     this._mode = value;
     this.clickMode = value;
-    // console.error('mode =', this._mode, this.statusInfo);
+    console.error('mode', this._mode);
     const player = this.players?.[this.currentPlayerIdx];
     if (player != null) {
       const cmd = `on_${this.mode}`;
@@ -107,29 +108,18 @@ export class SessionService {
         }
         if (this[cmd]) {
           this[cmd]();
-        } else if (this.mode === 'waitafter_player' || this.mode === 'waitafter_setup2') {
+        } else if (this.mode.startsWith('waitafter_')) {
           this.executeClick();
         }
       } else {
         if (this[cmd]) {
           this[cmd]();
         }
+        // else if (this.mode.startsWith('waitafter_')) {
+        //   this.executeClick();
+        // }
       }
     }
-  }
-
-  get waitLabel(): string {
-    switch (this.mode) {
-      case 'waitafter_player':
-        return $localize`Nächster Spieler`;
-      case 'waitafter_round':
-        if (this.gameIsOver) {
-          return $localize`Neues Spiel`;
-        } else {
-          return $localize`Nächste Runde`;
-        }
-    }
-    return '';
   }
 
   get inactivePlayers(): number[] {
@@ -148,7 +138,7 @@ export class SessionService {
   get gameInfo(): string {
     if (this.infos[this.mode] != null) {
       let ret = this.infos[this.mode];
-      if (this.mode === 'waitafter_round') {
+      if (this.mode === 'waitafter_endOfGame') {
         ret = this.endOfGameMessage;
       }
       ret = ret.replace(/@player@/g, this.players[this.currentPlayerIdx]?.name);
@@ -182,24 +172,24 @@ export class SessionService {
     return Utils.join(ret, '');
   }
 
+  get waitLabel(): string {
+    switch (this.mode) {
+      case 'waitafter_move':
+        return 'Weiter';
+      case 'waitafter_round':
+        return 'Nächste Runde';
+      case 'waitafter_endOfGame':
+        return 'Neues Spiel';
+    }
+    return '';
+  }
+
   private get statusInfo(): any {
     return {
       cp: this.players[this.currentPlayerIdx]?.forLog,
       np: this.players[this.nextPlayerIdx]?.forLog,
       cc: this.currentCard?.forLog
     };
-  }
-
-  winsFor(name: string): string {
-    const score = this.scores[this.getScoreKey()];
-    if (score == null || score.winners[name] == null) {
-      return '';
-    }
-    return Utils.plural(score.winners[name], {
-      0: '',
-      1: $localize`Ein Spiel gewonnen`,
-      other: $localize`${score.winners[name]} Spiele gewonnen`
-    });
   }
 
   getScoreKey(): string {
@@ -221,14 +211,12 @@ export class SessionService {
 
   waitForClick(): boolean {
     switch (this.mode) {
-      case 'waitafter_player':
-        return this.cfg.waitAfterPlayer;
+      case 'waitafter_move':
+        return this.cfg.waitAfterMove;
       case 'waitafter_round':
-        if (this.gameIsOver) {
-          return this.cfg.waitAfterGame;
-        } else {
-          return this.cfg.waitAfterRound;
-        }
+        return this.cfg.waitAfterRound;
+      case 'waitafter_endOfGame':
+        return this.cfg.waitAfterGame;
     }
     return false;
   }
@@ -238,12 +226,6 @@ export class SessionService {
       setTimeout(() => this.onWaitAfterClick(), 10);
     }
   }
-
-  // executeClick(): void {
-  //   if (!this.cfg.waitAfterPlayer) {
-  //     setTimeout(() => this.onWaitAfterClick(), 10);
-  //   }
-  // }
 
   loadConfig(): void {
     let cfg = JSON.parse(localStorage.getItem('config'));
@@ -482,17 +464,25 @@ export class SessionService {
         setTimeout(() => this.mode = 'selectPile', 10);
       } else {
         this.nextPlayerIdx = startPlayer;
-        setTimeout(() => this.mode = 'waitafter_setup2', 10);
+        setTimeout(() => this.mode = 'waitafter_move', 10);
       }
       return;
     }
     // Wenn noch nicht alle Spieler dran waren, dann ist der nächste dran.
     this.nextPlayerIdx = this.getNextPlayer();
-    setTimeout(() => this.mode = 'waitafter_setup2', 10);
+    setTimeout(() => this.mode = 'waitafter_move', 10);
   }
 
-  after_setup2(): void {
+  after_move(): void {
     this.startRound();
+  }
+
+  after_round(): void {
+    this.startRound();
+  }
+
+  after_endOfGame(): void {
+    this.initGame();
   }
 
   click_selectPile(card: CardData): boolean {
@@ -529,7 +519,7 @@ export class SessionService {
     this.currentCard.visible = false;
     this.players[this.currentPlayerIdx].gameGrid[this.modeData.y][this.modeData.x] = this.currentCard;
     this.getFromDrawPile();
-    this.showCard(this.currentCard, 'waitafter_player');
+    this.showCard(this.currentCard, 'waitafter_move');
   }
 
   on_open2playerStep1(): void {
@@ -545,17 +535,8 @@ export class SessionService {
     this.showCard(data.card, 'open2playerStep3', card);
   }
 
-  // on_open2playerStep3(): void {
-  //   if (this.modeData.pile._covered) {
-  //     this.uncoverCard(this.modeData.pile, 'open2playerStep4', this.modeData.player);
-  //   } else {
-  //     this.modeData = this.modeData.player;
-  //     setTimeout(() => this.mode = 'open2playerStep4', 10);
-  //   }
-  // }
-
   on_open2playerStep3(): void {
-    this.showCard(this.modeData, 'waitafter_player');
+    this.showCard(this.modeData, 'waitafter_move');
   }
 
   on_draw2openStep1(): void {
@@ -592,50 +573,14 @@ export class SessionService {
     return false;
   }
 
-  click_placeCard_org(card: CardData): boolean {
-    if (card.scope.type === 'player' && card.scope.param === this.currentPlayerIdx) {
-      // angeklickte Karte gehört dem Spieler
-      const pile = this.currentCard.scope.type;
-      this.currentCard.scope.param = this.currentPlayerIdx;
-      const data = this.players[this.currentPlayerIdx].replaceCard(card, this.currentCard);
-      if (data != null) {
-        if (pile === 'drawpile') {
-          this.getFromDrawPile();
-        } else {
-          this.getFromPile(this.openPile);
-        }
-        data.card.scope.type = 'openpile';
-        this.openPile.splice(0, 0, data.card);
-        this.uncoverCard(data.card, 'waitafter_player');
-        return true;
-      }
-      return false;
-    } else if (card.cardId === this.currentCard?.cardId && card.scope.type === 'openpile') {
-      // angeklickte Karte ist die selektierte Karte und auf dem offenen Stapel
-      this.currentCard = null;
-      setTimeout(() => this.mode = 'selectPile', 10);
-    } else if (card.scope.type === 'openpile') {
-      // Der offene Stapel wurde angeklickt
-      this.currentCard = this.getFromDrawPile();
-      this.currentCard.scope.type = 'openpile';
-      this.openPile.splice(0, 0, this.currentCard);
-      setTimeout(() => this.mode = 'uncoverCard', 10);
-    }
-    return false;
-  }
-
   click_uncoverCard(card: CardData): boolean {
     if (card.scope.type === 'player'
       && card.scope.param === this.currentPlayerIdx
       && card.isCovered) {
-      this.uncoverCard(card, 'waitafter_player');
+      this.uncoverCard(card, 'waitafter_move');
       return true;
     }
     return false;
-  }
-
-  after_player(): void {
-    this.startRound();
   }
 
   getNextPlayer(): number {
@@ -654,7 +599,7 @@ export class SessionService {
     if (this.modeData.length > 0) {
       this.showCard(this.currentCard, 'tripleStep2', this.modeData);
     } else {
-      this.showCard(this.currentCard, 'waitafter_player');
+      this.showCard(this.currentCard, 'waitafter_round');
     }
   }
 
@@ -666,7 +611,9 @@ export class SessionService {
     // Wenn der nächste Spieler, der dran ist fertig ist,
     // ist das Spiel beendet. Hier muss dann die Auswertung
     // des Spiels erfolgen.
+    console.log('Checke final');
     if (this.players[this.nextPlayerIdx].isDone) {
+      console.log('SCHICHT IM SCHACHT!!!!');
       if (this.finalizerIdx < 0) {
         this.finalizerIdx = this.nextPlayerIdx;
       }
@@ -705,25 +652,19 @@ export class SessionService {
         this.scores[key].addGame(this.players);
       }
       this.saveConfig();
-      setTimeout(() => {
-        this.mode = 'waitafter_round';
-        this.executeClick();
-      }, 10);
+      setTimeout(() => this.mode = 'waitafter_endOfGame', 10);
       return;
     }
     this.executeClick();
   }
 
-  on_waitafter_player(): void {
+  on_waitafter_round(): void {
     this.currentCard = null;
     const cards = this.players[this.currentPlayerIdx].checkTriple();
     if (cards.length > 0) {
       this.hideCard(cards[0], 'tripleStep1', cards);
+      console.log('SCHISSS!!!!');
       return;
-      // for (const card of cards) {
-      //   card.scope.type = 'openpile';
-      //   this.openPile.splice(0, 0, card);
-      // }
     }
     this.on_checkFinalizer();
   }
@@ -731,7 +672,7 @@ export class SessionService {
   on_setup1(): void {
     if (this.players[this.currentPlayerIdx].name === '@Dummy@') {
       this.players[this.currentPlayerIdx].setupDone = true;
-      this.mode = 'waitafter_setup2';
+      this.mode = 'waitafter_move';
     }
   }
 
@@ -758,7 +699,7 @@ export class SessionService {
     this.currentPlayerIdx = this.nextPlayerIdx;
     this.nextPlayerIdx = this.getNextPlayer();
     this.startPlayer();
-    if (this.mode !== 'waitafter_round') {
+    if (this.mode !== 'waitafter_endOfGame') {
       if (this.players[this.currentPlayerIdx].setupDone) {
         setTimeout(() => this.mode = 'selectPile', 10);
       } else {
@@ -766,8 +707,5 @@ export class SessionService {
       }
     }
   }
-
-  after_round(): void {
-    this.initGame();
-  }
 }
+*/

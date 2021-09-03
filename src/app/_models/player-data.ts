@@ -4,12 +4,12 @@ import {Utils} from '@/core/classes/utils';
 export class PlayerData {
   public gameGrid: CardData[][];
   public score: number;
+  public roundDouble: boolean;
   public board = 1;
   public avatar = null;
   public setupDone = false;
   public name: string;
-  public brain: any;
-  public opponentIdx: number;
+  private brain: any;
 
   constructor({name = 'Spieler', brain = null, opponentIdx = -1, board = 1, avatar = null}) {
     this.name = name;
@@ -24,10 +24,27 @@ export class PlayerData {
     }
   }
 
+  private _opponentIdx: number;
+
+  public get opponentIdx(): number {
+    return this._opponentIdx;
+  }
+
+  public set opponentIdx(value: number) {
+    this._opponentIdx = value;
+    if (value == null || value < 0) {
+      this.brain = null;
+    }
+  }
+
+  public get level(): number {
+    return this.brain?.level;
+  }
+
   get clone(): PlayerData {
     return new PlayerData({
       name: this.name,
-      brain: this.brain,
+      brain: this.brain?.create(this.brain.ss),
       opponentIdx: this.opponentIdx,
       board: this.board,
       avatar: this.avatar
@@ -100,6 +117,13 @@ export class PlayerData {
     return Utils.join(ret, ', ');
   }
 
+  value(x: number, y: number): number {
+    if (!this.gameGrid[y][x]?.isCovered) {
+      return this.gameGrid[y][x]?.value;
+    }
+    return null;
+  }
+
   reset(): void {
     this.setupDone = false;
     this.gameGrid = [];
@@ -138,17 +162,16 @@ export class PlayerData {
     const ret = [];
     for (let x = 0; x < this.gameGrid[0].length; x++) {
       let y = 1;
-      if (this.gameGrid[0][x] != null) {
-        const v = this.gameGrid[0][x].value;
+      if (this.value(x, 0) != null) {
+        const v = this.value(x, 0);
         while (y < this.gameGrid.length
-        && !this.gameGrid[y][x].isCovered
-        && this.gameGrid[y][x].value === v) {
+        && this.value(x, y) === v) {
           y++;
         }
         if (y === this.gameGrid.length) {
           for (let y = 0; y < this.gameGrid.length; y++) {
             ret.push(this.gameGrid[y][x]);
-            this.gameGrid[y][x] = null;
+//            this.gameGrid[y][x] = null;
           }
         }
       }
@@ -156,8 +179,8 @@ export class PlayerData {
     return ret;
   }
 
-  replaceCard(oldCard: CardData, newCard: CardData): {card: CardData, x: number, y: number} {
-    let ret = {card: null, x: -1, y:-1};
+  replaceCard(oldCard: CardData, newCard: CardData): { card: CardData, x: number, y: number } {
+    let ret = {card: null, x: -1, y: -1};
     this.gameGrid.forEach((row, y) => {
       let idx = 0;
       row.forEach((card, x) => {

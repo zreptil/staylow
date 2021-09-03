@@ -1,0 +1,21 @@
+@import '../styles/color-vars.scss';
+
+form {
+  display: flex;
+  flex-flow: column;
+
+  .panel {
+    display: flex;
+    flex-flow: column;
+  }
+}
+
+.title {
+  font-weight: bold;
+}
+
+mat-dialog-actions {
+  display: flex;
+  flex-flow: row;
+  justify-content: flex-end;
+}

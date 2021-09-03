@@ -13,6 +13,9 @@ export class OpponentTileComponent {
   @Input()
   player: PlayerData;
 
+  @Input()
+  hideIcon = false;
+
   constructor(public ss: SessionService) {
   }
 

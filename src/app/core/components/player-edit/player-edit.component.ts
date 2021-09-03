@@ -43,7 +43,7 @@ export class PlayerEditComponent {
       list.push({
         path: this.ss.avatarList.mask.replace(/@idx@/g, Utils.formatNumber(opponent.avatar, 2)),
         name: opponent.name,
-        level: opponent.brain.level
+        level: opponent.brain(this.ss).level
       });
     }
     const dialogRef = this.dialog.open(OpponentSelectorComponent);
@@ -63,7 +63,6 @@ export class PlayerEditComponent {
         this.player.avatar = 2;
         this.player.board = 2;
         this.player.opponentIdx = -1;
-        this.player.brain = null;
       }
     } else {
       this.player = this.ss.createPlayer({opponentIdx: 0});

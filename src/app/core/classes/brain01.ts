@@ -6,7 +6,15 @@ export class Brain01 {
   public player: PlayerData;
   public level = 1;
 
-  constructor(public ss: SessionService) {
+  protected constructor(public ss: SessionService) {
+  }
+
+  create(ss: SessionService): Brain01 {
+    return Brain01.factory(ss);
+  }
+
+  static factory(ss: SessionService): Brain01 {
+    return new Brain01(ss);
   }
 
   think_setup1(): CardData {

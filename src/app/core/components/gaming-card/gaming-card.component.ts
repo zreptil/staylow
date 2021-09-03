@@ -106,7 +106,7 @@ export class GamingCardComponent implements OnInit {
     const mode = this.card.modeAfterAnimation;
     this.card.modeAfterAnimation = null;
     if (mode != null) {
-      if (this.ss.mode !== 'waitafter_endOfGame') {
+      if (this.ss.mode !== 'waitafter_round') {
         this.ss.modeData = this.card.dataAfterAnimation;
         this.ss.mode = mode;
       }

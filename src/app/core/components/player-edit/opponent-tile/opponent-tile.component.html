@@ -1,9 +1,12 @@
 <div [style]="boardStyle(player.board)" class="opponent">
   <div class="info">
     <img [src]="player.avatarPath" alt="avatar{{player.avatar}}" class="avatar">
-    <div>{{player.name}}</div>
+    <div class="name">
+      <div>{{player.name}}</div>
+      <mat-icon *ngIf="!hideIcon">edit</mat-icon>
+    </div>
     <div class="levelPanel">
-      <div class="level" i18n>Level {{player.brain.level}}</div>
+      <div class="level" i18n>Level {{player.level}}</div>
     </div>
   </div>
 </div>

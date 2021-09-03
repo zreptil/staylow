@@ -1,6 +1,9 @@
+@import '../styles/color-vars.scss';
+
 form {
   display: flex;
   flex-flow: column;
+  min-width: 15em;
 
   .btnPanel {
     display: flex;

@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {SessionService} from '@/_services/session.service';
 import {CardData} from '@/_models/card-data';
 

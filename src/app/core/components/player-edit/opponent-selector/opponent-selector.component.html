@@ -1,5 +1,6 @@
 <div class="grid">
   <app-opponent-tile *ngFor="let entry of list; let idx = index"
+                     [hideIcon]="true"
                      [mat-dialog-close]="idx"
                      [player]="entry"></app-opponent-tile>
 </div>

@@ -1,0 +1,58 @@
+<h2 i18n mat-dialog-title>Einstellungen</h2>
+<mat-dialog-content class="mat-typography">
+  <form>
+    <div class="title" i18n>Animationen</div>
+    <div class="panel">
+      <mat-slide-toggle
+        (toggleChange)="changeFlipAnimation()"
+        [checked]="ss.cfg.showFlipAnimation"
+        class="example-margin"
+        disableRipple i18n>
+        Karte umdrehen
+      </mat-slide-toggle>
+      <mat-slide-toggle
+        (toggleChange)="changeMoveAnimation()"
+        [checked]="ss.cfg.showMoveAnimation"
+        class="example-margin"
+        disableRipple i18n>
+        Karte bewegen
+      </mat-slide-toggle>
+      <div class="title" i18n>Spielablauf</div>
+      <mat-slide-toggle
+        (toggleChange)="changeWaitAfterPlayer()"
+        [checked]="ss.cfg.waitAfterPlayer"
+        class="example-margin"
+        disableRipple i18n>
+        Warten, wenn ein Spieler dran war
+      </mat-slide-toggle>
+      <mat-slide-toggle
+        (toggleChange)="changeWaitAfterRound()"
+        [checked]="ss.cfg.waitAfterRound"
+        class="example-margin"
+        disableRipple i18n>
+        Warten, wenn eine Runde vorbei ist
+      </mat-slide-toggle>
+      <mat-slide-toggle
+        (toggleChange)="changeWaitAfterGame()"
+        [checked]="ss.cfg.waitAfterGame"
+        class="example-margin"
+        disableRipple i18n>
+        Warten, wenn ein Spiel vorbei ist
+      </mat-slide-toggle>
+      <div class="title" i18n>Sonstiges</div>
+      <mat-slide-toggle
+        (toggleChange)="changeCurrentPlayerLeft()"
+        [checked]="ss.cfg.currentPlayerLeft"
+        class="example-margin"
+        disableRipple i18n>
+        Aktuellen Spieler an erste Stelle verschieben
+      </mat-slide-toggle>
+    </div>
+    <hr>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button [mat-dialog-close]="cfg" mat-button>
+    <mat-icon>save</mat-icon>
+  </button>
+</mat-dialog-actions>

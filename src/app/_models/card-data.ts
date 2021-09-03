@@ -17,7 +17,7 @@ export class CardData {
   }
 
   public set modeAfterAnimation(value: string) {
-    console.error('set modeAfterAnimation', value);
+    // console.error('set modeAfterAnimation', value);
     this._modeAfterAnimation = value;
   }
 

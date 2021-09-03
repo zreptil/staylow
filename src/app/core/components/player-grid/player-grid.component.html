@@ -11,16 +11,20 @@
             </td>
           </tr>
         </table>
-        <div (click)="clickInfo(player, idx)" [class]="['info', ss.appMode==='config' ? 'clickabale' : null]">
+        <div (click)="clickInfo(player, idx)" [class]="['info', ss.appMode==='config' ? 'clickable' : null]">
           <div class="player">
-            <div class="name">{{player.name}}</div>
+            <div class="name">
+              <div>{{player.name}}</div>
+              <mat-icon *ngIf="ss.appMode==='config'">edit</mat-icon>
+            </div>
             <img *ngIf="player.avatar!=''"
                  [src]="player.avatarPath"
                  class="avatar">
           </div>
           <ng-container *ngIf="ss.appMode!=='config'">
             <div class="counter">
-              Gesamtpunkte: {{player.score}}
+              <div i18n>Punkte im Spiel: {{player.score}}</div>
+              <div>{{ss.winsFor(player.name)}}</div>
             </div>
             <div class="counter">
               Sichtbar: {{player.visibleValue}}
@@ -29,12 +33,12 @@
         </div>
       </div>
     </div>
-    <div *ngIf="ss.appMode==='config' && ss.players.length<8" style="order:1000" class="player add">
+    <div *ngIf="ss.appMode==='config' && ss.players.length<8" class="player add" style="order:1000">
       <div class="board">
-        <div (click)="clickInfo(null, ss.players.length)" [class]="['info', 'clickabale']">
+        <div (click)="clickInfo(null, ss.players.length)" [class]="['info', 'clickable']">
           <div class="player">
-            <div class="name">Spieler hinzufügen</div>
-            <mat-icon>add</mat-icon>
+            <div class="name" i18n>Spieler hinzufügen</div>
+            <mat-icon class="add">add</mat-icon>
           </div>
         </div>
       </div>
@@ -42,6 +46,13 @@
   </div>
 </div>
 <div class="pnlControls">
-  <button (click)="clickGame()" *ngIf="ss.appMode==='config'" mat-raised-button>Spielen</button>
-  <button (click)="clickConfig()" *ngIf="ss.appMode!=='config'" mat-raised-button>Konfiguration</button>
+  <button (click)="clickGame()" *ngIf="ss.appMode==='config'" class='text' i18n mat-raised-button>Spielen</button>
+  <button (click)="clickConfig()" *ngIf="ss.appMode!=='config'" class='text' i18n mat-raised-button>Konfiguration
+  </button>
+  <button (click)="clickSettings()" mat-icon-button>
+    <mat-icon>settings</mat-icon>
+  </button>
+  <button (click)="clickWhatsnew()" mat-icon-button>
+    <mat-icon>description</mat-icon>
+  </button>
 </div>

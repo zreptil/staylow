@@ -1,0 +1,62 @@
+<h2 mat-dialog-title>
+  <mat-toolbar>
+    <mat-toolbar-row>
+      <span>Was gibt es Neues?</span>
+      <button [mat-dialog-close]="'x'" mat-icon-button>
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-toolbar-row>
+  </mat-toolbar>
+</h2>
+<mat-dialog-content class="mat-typography">
+  <div *ngIf="winners?.length>0" class="scores">
+    <div class="title" i18n>Gewonnene Spiele</div>
+    <table>
+      <tr *ngFor="let winner of winners" class="">
+        <td>{{winner.name}}</td>
+        <td>{{winner.score}}</td>
+      </tr>
+    </table>
+  </div>
+  <div class="root">
+    <h2><span i18n>Version</span><span i18n="@@v052">0.5.2 - xx.9.2021</span></h2>
+    <ul>
+      <li class="added" i18n="@@v051a2">
+        [ noch nix Neues ]
+      </li>
+    </ul>
+    <h2><span i18n>Version</span><span i18n="@@v051">0.5.1 - 2.9.2021</span></h2>
+    <ul>
+      <li class="added" i18n="@@v051a1">
+        Die Punkte werden nun lokal gespeichert und werden hier und im Spiel für die aktuelle Paarung angezeigt.
+      </li>
+      <li class="added" i18n="@@v051a2">
+        In den Einstellungen kann man für verschiedene Vorkommnisse im Spiel festlegen, ob auf den Buttonklick
+        des Benutzers gewartet werden soll.
+      </li>
+      <li class="added" i18n="@@v051a3">
+        Es sollte jetzt klarer sein, dass man die Spieler und Computergegner durch Anklicken konfigurieren
+        kann.
+      </li>
+      <li class="fixed" i18n="@@v051f1">
+        Die Gegner Gerda Greencard, Günter Grünspan, Lilly Lustig und Leo Löwenzahn achten nun besser darauf,
+        keine niedrigen Karten gegen höhere auszutauschen.
+      </li>
+    </ul>
+    <h2><span i18n>Version</span><span i18n="@@v050">0.5.0 - 31.8.2021</span></h2>
+    <ul>
+      <li class="added" i18n="@@v050a1">
+        Es gibt zwei neue Gegner, die auf Level 3 spielen.
+      </li>
+      <li class="added" i18n="@@v050a2">
+        Es gibt eine neue Animation, wenn eine Spalte mit gleichen Karten entfernt wird.
+      </li>
+      <li class="added" i18n="@@v050a3">
+        Die Animationen sind über das Zahnrad-Icon ein- und abschaltbar.
+      </li>
+      <li class="added" i18n="@@v050a4">
+        Diese Seite mit Informationen zu Neuerungen wurde hinzugefügt.
+      </li>
+    </ul>
+  </div>
+</mat-dialog-content>

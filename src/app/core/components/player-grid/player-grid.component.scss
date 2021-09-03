@@ -15,11 +15,33 @@
 
     .player {
       display: flex;
-      height: fit-content;
+      position: relative;
 
       .name {
+        display: flex;
+        flex-flow: row;
+        justify-content: center;
         min-height: 3em;
         font-size: 0.7em;
+      }
+
+      mat-icon {
+        _margin-left: 0.5em;
+        font-size: 2em;
+      }
+    }
+
+    .clickable {
+      .player {
+        padding: 0 !important;
+        min-width: 8em;
+        .name {
+          justify-content: space-between;
+          padding: 0 1em;
+        }
+        mat-icon.add {
+          align-self: center;
+        }
       }
     }
 
@@ -49,11 +71,11 @@
       .player {
         display: flex;
         flex-flow: column;
-        align-items: center;
         justify-content: center;
 
         .avatar {
           width: 4em;
+          align-self: center;
         }
       }
     }
@@ -66,7 +88,7 @@
   }
 
   .pnlControls {
-    button {
+    button.text {
       width: 10em;
     }
 

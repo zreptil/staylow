@@ -1,13 +1,20 @@
 import {SessionService} from '@/_services/session.service';
 import {CardData} from '@/_models/card-data';
-import {PlayerData} from '@/_models/player-data';
 import {Brain01} from '@/core/classes/brain01';
 
 export class Brain02 extends Brain01 {
   public level = 2;
 
-  constructor(public ss: SessionService) {
+  protected constructor(public ss: SessionService) {
     super(ss);
+  }
+
+  static factory(ss: SessionService): Brain02 {
+    return new Brain02(ss);
+  }
+
+  create(ss: SessionService): Brain02 {
+    return Brain02.factory(ss);
   }
 
   think_selectPile(): CardData {
@@ -20,12 +27,14 @@ export class Brain02 extends Brain01 {
 
   think_placeCard(): CardData {
     let card = this.findHighestCard();
-    if (card != null && card.value > 4) {
+    if (card?.value > 4 && this.ss.currentCard.value < card?.value) {
       return card;
     }
     card = null;
     if (this.ss.currentCard.scope.type === 'openpile') {
-      card = this.think_uncoverCard();
+      card = this.selectCoveredCard();
+    } else if (this.ss.currentCard.value <= 4) {
+      card = this.selectCoveredCard();
     } else {
       card = this.ss.openPile[0];
     }

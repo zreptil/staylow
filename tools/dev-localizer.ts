@@ -51,6 +51,7 @@ function parseTranslationsForLocalize(xml: string): Promise<Record<MessageId, Ta
           result[current] = elem;
         } else {
           if (elem != null) {
+            // console.log(elem);
             result[current] = elem.map((entry: string | { [key: string]: any }) => {
               return typeof entry === 'string' ? entry : '{$' + entry.Standalone.id + '}';
 //              return typeof entry === 'string' ? entry : '{$' + entry.Standalone['equiv-text'] + '}';

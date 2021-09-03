@@ -14,16 +14,16 @@
       <ng-container *ngIf="ss.infos[ss.mode] != null">
         <div [innerHtml]="ss.gameInfo"></div>
         <button (click)="ss.onWaitAfterClick()"
-                *ngIf="ss.mode.startsWith('waitafter_')"
-                color="primary" i18n
+                *ngIf="ss.waitForClick()"
+                color="primary"
                 mat-raised-button>
-          Weiter
+          {{ss.waitLabel}}
         </button>
       </ng-container>
     </div>
   </div>
 </ng-container>
 <app-player-grid [class]="[ss.appMode]"></app-player-grid>
-<div *ngIf="!ss.env.production" class="dbg-info">
+<div *ngIf="!ss.env.production && ss.appMode==='game'" class="dbg-info">
   {{ss.players[ss.currentPlayerIdx]?.name}} - {{ss.mode}}
 </div>

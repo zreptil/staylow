@@ -12,3 +12,23 @@ $tm: -0.05em;
 $text_shadow: $tm $tp 0px #fff, $tm $tm 0px #fff, $tp $tm 0px #fff, $tp $tp 0px #fff;
 $text_stroke: $tp white;
 $active_left: 20em;
+$slider_track_on: #714839;
+$slider_thumb_on: #3b271d;
+$slider_track_off: rgba(0, 0, 0, 0.2);
+$slider_thumb_off: #fd6;
+
+:host ::ng-deep .mat-slide-toggle.mat-checked:not(.mat-disabled) .mat-slide-toggle-bar {
+  background-color: $slider_track_on;
+}
+
+:host ::ng-deep .mat-slide-toggle.mat-checked:not(.mat-disabled) .mat-slide-toggle-thumb {
+  background-color: $slider_thumb_on;
+}
+
+:host ::ng-deep .mat-slide-toggle:not(mat-checked):not(.mat-disabled) .mat-slide-toggle-bar {
+  background-color: $slider_track_off;
+}
+
+:host ::ng-deep .mat-slide-toggle:not(.mat-checked):not(.mat-disabled) .mat-slide-toggle-thumb {
+  background-color: $slider_thumb_off;
+}
