@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {SessionService} from '@/_services/session.service';
 import {BreakpointObserver} from '@angular/cdk/layout';
 import {PlayerData} from '@/_models/player-data';
-import {MatDialog} from '@angular/material/dialog';
+import {MatLegacyDialog as MatDialog} from '@angular/material/legacy-dialog';
 import {Utils} from '@/core/classes/utils';
 import {PlayerEditComponent} from '@/core/components/player-edit/player-edit.component';
 import {SettingsDialogComponent} from '@/core/components/config-dialog/settings-dialog.component';

@@ -16,7 +16,7 @@ import {LayoutModule} from '@angular/cdk/layout';
 import {PlayerEditComponent} from './core/components/player-edit/player-edit.component';
 import {ImageSelectorComponent} from './core/components/player-edit/image-selector/image-selector.component';
 import {MatBadgeModule} from '@angular/material/badge';
-import {MatChipsModule} from '@angular/material/chips';
+import {MatLegacyChipsModule as MatChipsModule} from '@angular/material/legacy-chips';
 import {OpponentTileComponent} from './core/components/player-edit/opponent-tile/opponent-tile.component';
 import {OpponentSelectorComponent} from './core/components/player-edit/opponent-selector/opponent-selector.component';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';

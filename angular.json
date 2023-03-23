@@ -128,22 +128,11 @@
             ],
             "scripts": []
           }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "exclude": [
-              "**/node_modules/**"
-            ],
-            "tsConfig": [
-              "tsconfig.app.json",
-              "tsconfig.spec.json",
-              "e2e/tsconfig.json"
-            ]
-          }
         }
       }
     }
   },
-  "defaultProject": "staylow"
+  "cli": {
+    "analytics": "eab93a82-291c-406f-b3c8-03bdfb1d9c81"
+  }
 }

@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {SessionService} from '@/_services/session.service';
-import {MatDialog} from '@angular/material/dialog';
+import {MatLegacyDialog as MatDialog} from '@angular/material/legacy-dialog';
 import {ImageSelectorComponent} from '@/core/components/player-edit/image-selector/image-selector.component';
 import {PlayerData} from '@/_models/player-data';
 import {Utils} from '@/core/classes/utils';
